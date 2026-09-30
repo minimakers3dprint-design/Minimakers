@@ -1,658 +1,332 @@
-/* Basisstijlen */
+/* Reset & Basis Variabelen */
+:root {
+    --primary: #10b981;
+    --primary-hover: #059669;
+    --bg-dark: #0f172a;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --radius: 16px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    box-sizing: border-box;
 }
 
 body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: #f8fafc;
-    color: #1e293b;
+    color: var(--text-main);
+    line-height: 1.5;
 }
 
-/* Header bovenin */
-header {
-    background-color: #0f172a;
-    color: white;
-    padding: 30px 20px;
-    text-align: center;
-}
-
-header .logo {
-    font-size: 2.2rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-header p {
-    color: #38bdf8;
-    margin-top: 5px;
-}
-
-/* Pagina indeling */
 .container {
-    max-width: 1100px;
-    margin: 40px auto;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 0 20px;
 }
 
-.container h2 {
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+/* Header & Navigatie */
+.site-header {
+    background: var(--bg-dark);
+    color: white;
+    text-align: center;
+    padding-bottom: 40px;
 }
 
-/* Product Raster (Grid) */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 25px;
+.top-bar {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Productkaartjes */
-.product-card {
+.top-socials {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.social-link:hover {
+    color: white;
+}
+
+.header-main {
+    padding: 40px 20px 10px;
+}
+
+.brand-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+    color: #94a3b8;
+    font-size: 1.05rem;
+    margin-top: 6px;
+}
+
+/* Controls / Filter Sectie */
+.controls-section {
+    margin-top: -30px;
+    margin-bottom: 40px;
+}
+
+.filter-card {
     background: white;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-wrapper {
+    flex: 1;
+    min-width: 260px;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+#search-input {
+    width: 100%;
+    padding: 12px 14px 12px 42px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#search-input:focus, #category-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.select-wrapper select {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background-color: white;
+    color: var(--text-main);
+    outline: none;
+    cursor: pointer;
+}
+
+/* Section Header */
+.section-header {
+    margin-bottom: 30px;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.section-header p {
+    color: var(--text-muted);
+}
+
+/* Producten Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+/* Product Card met Hover-effecten */
+.product-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
-/* Afbeeldingen van producten */
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: #f1f5f9;
+    overflow: hidden;
+}
+
 .product-image {
     width: 100%;
-    height: 180px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    background-color: #e2e8f0;
+    transition: transform 0.5s ease;
 }
 
-.product-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+.product-card:hover .product-image {
+    transform: scale(1.05);
 }
 
-.price {
+.badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--bg-dark);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.badge.premium {
+    background: #8b5cf6;
+}
+
+.card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-title {
     font-size: 1.2rem;
-    font-weight: bold;
-    color: #0284c7;
-    margin-bottom: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
 }
 
-/* Filament kleurkeuze dropdown */
+.price-tag {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-hover);
+    margin-bottom: 4px;
+}
+
+.material-tag {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
 .color-select {
-    margin-bottom: 12px;
-    text-align: left;
+    margin-top: auto;
+    margin-bottom: 16px;
 }
 
 .color-select label {
     display: block;
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 4px;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
 }
 
 .select-box {
     width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    background-color: #fff;
-    color: #1e293b;
-    outline: none;
-    cursor: pointer;
-}
-
-.select-box:focus {
-    border-color: #0284c7;
-}
-
-/* Knop voor winkelmandje */
-.btn {
-    background-color: #0f172a;
-    color: white;
-    border: none;
-    padding: 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    width: 100%;
-    transition: background-color 0.2s ease;
-}
-
-.btn:hover {
-    background-color: #0284c7;
-}
-/* Maak de winkelmand-knop in de header klikbaar */
-.cart-button {
-    cursor: pointer;
-    user-select: none;
-}
-
-/* Donkere achtergrond als het winkelmandje open is */
-.cart-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 99;
-}
-
-/* Zijbalk winkelmand */
-.cart-drawer {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 350px;
-    height: 100%;
-    background: white;
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    transition: right 0.3s ease;
-}
-
-/* Als het mandje actief is, schuift hij in beeld */
-.cart-drawer.open {
-    right: 0;
-}
-
-.cart-overlay.open {
-    display: block;
-}
-
-.cart-header {
-    background: #0f172a;
-    color: white;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.8rem;
-    cursor: pointer;
-}
-
-.cart-items {
-    padding: 20px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-.empty-msg {
-    color: #64748b;
-    text-align: center;
-    margin-top: 30px;
-}
-
-/* Losse items in de lijst */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.cart-item-info h4 {
-    font-size: 0.95rem;
-    margin-bottom: 3px;
-}
-
-.cart-item-info p {
-    font-size: 0.85rem;
-    color: #64748b;
-}
-
-.remove-btn {
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.8rem;
-}
-
-.remove-btn:hover {
-    background: #dc2626;
-}
-
-.cart-footer {
-    padding: 20px;
-    border-top: 1px solid #e2e8f0;
+    font-size: 0.88rem;
+    outline: none;
     background: #f8fafc;
 }
 
-.total-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
-/* Chique styling voor items in de winkelmand */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.cart-item-info h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #0f172a;
-    margin-bottom: 6px;
-}
-
-.cart-item-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Stijlvol kleurlabel */
-.color-badge {
-    background-color: #f1f5f9;
-    color: #475569;
-    font-size: 0.75rem;
-    padding: 3px 8px;
-    border-radius: 12px;
-    text-transform: capitalize;
-    font-weight: 500;
-    border: 1px solid #e2e8f0;
-}
-
-.cart-item-price {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #0284c7;
-}
-
-/* Subtiel prullenbak icoontje */
-.remove-btn {
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    padding: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.remove-btn:hover {
-    background-color: #fef2f2;
-    color: #ef4444;
-    transform: scale(1.1);
-}
-/* --- CHECKOUT POP-UP STYLING --- */
-
-/* Zorgt dat alle vakjes netjes binnen de kaart blijven */
-.checkout-modal * {
-    box-sizing: border-box;
-}
-
-/* De pop-up kaart zelf (in het midden van je scherm) */
-.checkout-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 480px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    display: none; /* Standaard onzichtbaar totdat iemand op afrekenen klikt */
-    overflow: hidden;
-}
-
-/* Zichtbaar wanneer geopend */
-.checkout-modal.open {
-    display: block;
-}
-
-/* Donkere header van het formulier */
-.checkout-header {
-    background-color: #0f172a;
-    color: #ffffff;
-    padding: 18px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.checkout-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #ffffff;
-}
-
-.checkout-header .close-btn {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 1.8rem;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0;
-}
-
-/* Inhoud van het formulier */
-.checkout-body {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* Elk invoervak met label erboven */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+.btn {
     width: 100%;
-}
-
-.form-group label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    background-color: #f8fafc;
-    transition: border-color 0.2s, background-color 0.2s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: #0284c7;
-    background-color: #ffffff;
-    outline: none;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-/* Verstuurknop */
-.checkout-submit-btn {
-    width: 100%;
-    margin-top: 8px;
     padding: 12px;
-    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary);
+    color: white;
     font-weight: 600;
-    border-radius: 8px;
-}
-/* Top Social Knoppen */
-.top-socials {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
 }
 
+.btn:hover {
+    background: var(--primary-hover);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Footer */
 .site-footer {
-    grid-column: 1 / -1; /* Zorgt dat de footer uit het vakje springt en de volle breedte inneemt */
-    width: 100%;
-    text-align: left; /* Zet de tekst linksonder */
-    padding: 30px 0 15px 0;
-    margin-top: 50px;
-    border-top: 1px solid #cbd5e1;
-    color: #64748b;
-    font-size: 14px;
-}
-    transition: all 0.2s ease;
-}
-
-.social-pill:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-/* WhatsApp Groen */
-.social-pill.whatsapp {
-    background-color: #25D366;
-}
-
-/* YouTube Rood */
-.social-pill.youtube {
-    background-color: #FF0000;
-}
-/* Footer & Mail link */
-.site-footer {
-    text-align: center;
-    padding: 25px 15px;
-    margin-top: 50px;
-    border-top: 1px solid #1e293b;
+    background: var(--bg-dark);
     color: #94a3b8;
-    font-size: 14px;
+    text-align: center;
+    padding: 40px 0;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.site-footer p {
-    margin: 0;
-}
-
-.email-link {
-    color: #38bdf8; /* Mogelijke accentkleur / lichtblauw */
+.site-footer a {
+    color: var(--primary);
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
 }
 
-.email-link:hover {
-    color: #60a5fa;
-    text-decoration: underline;
-}
-/* Informatieblokje voor betaling in het formulier */
-.payment-info {
-    background-color: #1e293b; /* Donkerblauw vlakje */
-    border-left: 4px solid #38bdf8; /* Lichtblauw accent streepje aan de linkerkant */
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    color: #e2e8f0;
-    font-size: 13px;
-    line-height: 1.5;
+.copyright {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    opacity: 0.6;
 }
 
-.payment-info p {
-    margin: 0;
-}
-/* Styling voor de +/- knoppen in de winkelmand */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #334155;
-}
-
-.cart-item-details {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.cart-item-color {
-    font-size: 12px;
-    color: #94a3b8;
+/* Toast Notificatie */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--bg-dark);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    font-weight: 500;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    z-index: 1000;
+    border-left: 4px solid var(--primary);
 }
 
-.cart-item-price {
-    font-weight: bold;
-    color: #38bdf8;
-    font-size: 14px;
-}
-
-.cart-item-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.qty-btn {
-    background-color: #334155;
-    color: #ffffff;
-    border: none;
-    width: 26px;
-    height: 26px;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-}
-
-.qty-btn:hover {
-    background-color: #0284c7;
-}
-
-.qty-number {
-    font-weight: bold;
-    color: #f8fafc;
-    min-width: 16px;
-    text-align: center;
-}
-
-.remove-btn {
-    background: transparent;
-    border: none;
-    color: #ef4444;
-    font-size: 20px;
-    cursor: pointer;
-    margin-left: 6px;
-    line-height: 1;
-}
-
-.remove-btn:hover {
-    color: #f87171;
-}
-/* Styling voor het aantal BBOVEN de plus/min knoppen */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #334155;
-}
-
-.cart-item-details {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.cart-item-color {
-    font-size: 12px;
-    color: #94a3b8;
-}
-
-.cart-item-price {
-    font-weight: bold;
-    color: #38bdf8;
-    font-size: 14px;
-}
-
-.cart-item-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* Blokje waarin het aantal boven de plus/min knoppen staat */
-.qty-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.qty-label {
-    font-size: 12px;
-    color: #cbd5e1;
-}
-
-.qty-label strong {
-    color: #38bdf8;
-    font-size: 13px;
-}
-
-.qty-buttons {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.qty-btn {
-    background-color: #334155;
-    color: #ffffff;
-    border: none;
-    width: 28px;
-    height: 26px;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-}
-
-.qty-btn:hover {
-    background-color: #0284c7;
-}
-
-.remove-btn {
-    background: transparent;
-    border: none;
-    color: #ef4444;
-    font-size: 22px;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.remove-btn:hover {
-    color: #f87171;
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
 }
