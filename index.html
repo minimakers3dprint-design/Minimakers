@@ -8,7 +8,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo.png?v=2">
 
-    <!-- Google Fonts voor strakke typografie -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -36,9 +36,22 @@
             </div>
         </div>
 
-        <div class="header-main">
-            <h1 class="brand-title">Minimakers</h1>
-            <p class="brand-subtitle">Uw 3D-geprinte spullen voor een lage prijs</p>
+        <div class="header-main container">
+            <div class="brand-container">
+                <h1 class="brand-title">Minimakers</h1>
+                <p class="brand-subtitle">Uw 3D-geprinte spullen voor een lage prijs</p>
+            </div>
+            
+            <!-- Winkelmand Knop -->
+            <button id="open-cart-btn" class="cart-trigger-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-text">Winkelmand</span>
+                <span id="cart-badge" class="cart-badge">0</span>
+            </button>
         </div>
     </header>
 
@@ -69,8 +82,7 @@
     <main class="main-content container">
         <div class="section-header">
             <h2>Onze Collectie</h2>
-            <p> Fidgets
-            </p>
+            <p>Handgemaakt, duurzaam en direct klaar voor verzending.</p>
         </div>
 
         <div class="products-grid">
@@ -101,7 +113,7 @@
                         </select>
                     </div>
 
-                    <button class="btn add-to-cart-btn" data-id="1" data-name="Multiclicker" data-price="2.50">In winkelmand</button>
+                    <button class="btn add-to-cart-btn" data-id="1" data-name="Multiclicker" data-price="2.50" data-image="mmm.jpg">In winkelmand</button>
                 </div>
             </article>
 
@@ -130,7 +142,7 @@
                         </select>
                     </div>
 
-                    <button class="btn add-to-cart-btn" data-id="2" data-name="Bobatea Switch" data-price="2.50">In winkelmand</button>
+                    <button class="btn add-to-cart-btn" data-id="2" data-name="Bobatea Switch" data-price="2.50" data-image="bobatea.jpg">In winkelmand</button>
                 </div>
             </article>
 
@@ -159,7 +171,7 @@
                         </select>
                     </div>
 
-                    <button class="btn add-to-cart-btn" data-id="3" data-name="Schakelfidget" data-price="2.50">In winkelmand</button>
+                    <button class="btn add-to-cart-btn" data-id="3" data-name="Schakelfidget" data-price="2.50" data-image="schakel.jpg">In winkelmand</button>
                 </div>
             </article>
 
@@ -189,7 +201,7 @@
                         </select>
                     </div>
 
-                    <button class="btn add-to-cart-btn" data-id="4" data-name="Pistachio Bowl" data-price="10.00">In winkelmand</button>
+                    <button class="btn add-to-cart-btn" data-id="4" data-name="Pistachio Bowl" data-price="10.00" data-image="pistachio.jpg">In winkelmand</button>
                 </div>
             </article>
 
@@ -204,7 +216,104 @@
         </div>
     </footer>
 
-    <!-- Toast notificatie element voor winkelmand-bevestiging -->
+    <!-- Slide-out Winkelmand -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Jouw Winkelmand</h2>
+            <button id="close-cart-btn" class="close-cart-btn">&times;</button>
+        </div>
+        
+        <div id="cart-items-container" class="cart-items-container">
+            <p class="empty-cart-msg">Je winkelmand is nog leeg.</p>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Totaal:</span>
+                <span id="cart-total-price">€0,00</span>
+            </div>
+            <button id="checkout-btn" class="btn checkout-btn">
+                Afrekenen
+            </button>
+        </div>
+    </div>
+
+    <!-- POP-UP 1: Keuze tussen Verder winkelen of Afrekenen -->
+    <div id="choice-modal" class="modal-overlay">
+        <div class="modal-card text-center">
+            <button id="close-choice-btn" class="close-modal-btn">&times;</button>
+            <div class="added-icon">✓</div>
+            <h3>Toegevoegd aan winkelmand!</h3>
+            <p>Wat wil je nu doen?</p>
+            
+            <div class="modal-actions-row">
+                <button id="continue-shopping-btn" class="btn btn-secondary">Verder winkelen</button>
+                <button id="go-to-checkout-btn" class="btn btn-primary">Direct afrekenen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POP-UP 2: Tweestaps Afrekenen (Stap 1: Controleer & Wijzig / Stap 2: Gegevens) -->
+    <div id="checkout-modal" class="modal-overlay">
+        <div class="modal-card modal-large">
+            <button id="close-modal-btn" class="close-modal-btn">&times;</button>
+            
+            <!-- STAP 1: OVERZICHT & ANPASSEN -->
+            <div id="checkout-step-1" class="checkout-step active">
+                <h3>Controleer je bestelling</h3>
+                <p>Controleer en wijzig hier je gekozen artikelen voordat je je gegevens invult.</p>
+                
+                <div id="checkout-review-items" class="review-items-list">
+                    <!-- Items worden hier dynamisch ingeladen met +/- knoppen -->
+                </div>
+
+                <div class="review-total-box">
+                    <span>Totaalbedrag:</span>
+                    <strong id="review-total-price">€0,00</strong>
+                </div>
+
+                <div class="modal-actions-row">
+                    <button id="back-to-shop-btn" class="btn btn-secondary">Verder winkelen</button>
+                    <button id="proceed-to-step-2-btn" class="btn btn-primary">Volgende: Gegevens invullen &rarr;</button>
+                </div>
+            </div>
+
+            <!-- STAP 2: GEGEVENS INVULLEN -->
+            <div id="checkout-step-2" class="checkout-step">
+                <button id="back-to-step-1-btn" class="back-link">&larr; Terug naar overzicht</button>
+                <h3>Gegevens invullen</h3>
+                <p>Vul je contactgegevens in om de bestelling af te ronden.</p>
+
+                <form id="order-form" action="https://formspree.io/f/xbjvn83d" method="POST" class="order-form">
+                    <div class="form-group">
+                        <label for="customer-name">Naam *</label>
+                        <input type="text" id="customer-name" name="Naam" required placeholder="Jouw volledige naam">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-contact">E-mail of Telefoonnummer *</label>
+                        <input type="text" id="customer-contact" name="Contactgegevens" required placeholder="bijv. naam@email.nl of 0612345678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-preference">Hoe wil je het betaalverzoek ontvangen? *</label>
+                        <select id="contact-preference" name="Voorkeur_Contact" required class="select-box">
+                            <option value="WhatsApp">Via WhatsApp</option>
+                            <option value="E-mail">Via E-mail</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="cart-details-input" name="Bestelling">
+
+                    <button type="submit" class="btn submit-order-btn">Verstuur Bestelling</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast notificatie -->
     <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
