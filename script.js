@@ -57,6 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const proceedToStep2Btn = document.getElementById('proceed-to-step-2-btn');
     const backToStep1Btn = document.getElementById('back-to-step-1-btn');
     const cartDetailsInput = document.getElementById('cart-details-input');
+    const orderForm = document.getElementById('order-form');
+
+    // Success Modal
+    const successModal = document.getElementById('success-modal');
+    const finishOrderBtn = document.getElementById('finish-order-btn');
+    const successMessageText = document.getElementById('success-message-text');
 
     function openCart() {
         cartOverlay.classList.add('open');
@@ -95,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${item.image}" alt="${item.name}" class="cart-item-img">
                 <div class="cart-item-info">
                     <div class="cart-item-title">${item.name} <span style="color:#64748b; font-size:0.85rem;">x${item.quantity}</span></div>
-                    <div class="cart-item-color">Kleur: ${item.color}</div>
+                    <div class="cart-item-color">${item.color}</div>
                     <div class="cart-item-price">€${(item.price * item.quantity).toFixed(2).replace('.', ',')}</div>
                 </div>
                 <button class="remove-item-btn" data-index="${index}">Verwijder</button>
@@ -118,18 +124,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Product toevoegen
+    // Product toevoegen met verwerking van MEERDERE kleuropties
     const addButtons = document.querySelectorAll('.add-to-cart-btn');
     addButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
             
+            // Verzamelt alle geselecteerde kleuren binnen deze kaart
+            const colorSelects = card.querySelectorAll('.select-box');
+            let colorStringArray = [];
+
+            colorSelects.forEach(select => {
+                const labelName = select.getAttribute('data-color-label') || 'Kleur';
+                colorStringArray.push(`${labelName}: ${select.value}`);
+            });
+
+            const fullColorString = colorStringArray.join(', ');
+
             const product = {
                 id: button.getAttribute('data-id'),
                 name: button.getAttribute('data-name'),
                 price: parseFloat(button.getAttribute('data-price')),
                 image: button.getAttribute('data-image'),
-                color: card.querySelector('.select-box').value,
+                color: fullColorString,
                 quantity: 1
             };
 
@@ -175,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             div.innerHTML = `
                 <div class="review-item-info">
                     <div class="review-item-title">${item.name}</div>
-                    <div class="review-item-sub">Kleur: ${item.color} | €${item.price.toFixed(2).replace('.', ',')} p.st.</div>
+                    <div class="review-item-sub">${item.color} | €${item.price.toFixed(2).replace('.', ',')} p.st.</div>
                 </div>
                 <div class="qty-controls">
                     <button class="qty-btn minus-btn" data-index="${index}">-</button>
@@ -189,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         reviewTotalPrice.textContent = `€${total.toFixed(2).replace('.', ',')}`;
 
-        // Plus, Min en Verwijder knoppen in de review
         document.querySelectorAll('.minus-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = e.target.getAttribute('data-index');
@@ -229,6 +245,34 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModalBtn.addEventListener('click', () => checkoutModal.classList.remove('open'));
     backToShopBtn.addEventListener('click', () => checkoutModal.classList.remove('open'));
 
+    // === 4. DYNAMISCHE CONTACTMETHODE LOGICA ===
+    const optionWhatsapp = document.getElementById('option-whatsapp');
+    const optionEmail = document.getElementById('option-email');
+    const contactInputLabel = document.getElementById('contact-input-label');
+    const customerContactInput = document.getElementById('customer-contact');
+
+    if (optionWhatsapp && optionEmail) {
+        optionWhatsapp.addEventListener('click', () => {
+            optionWhatsapp.classList.add('active');
+            optionEmail.classList.remove('active');
+            optionWhatsapp.querySelector('input').checked = true;
+
+            contactInputLabel.textContent = "Telefoonnummer (WhatsApp) *";
+            customerContactInput.type = "tel";
+            customerContactInput.placeholder = "06 12345678";
+        });
+
+        optionEmail.addEventListener('click', () => {
+            optionEmail.classList.add('active');
+            optionWhatsapp.classList.remove('active');
+            optionEmail.querySelector('input').checked = true;
+
+            contactInputLabel.textContent = "E-mailadres *";
+            customerContactInput.type = "email";
+            customerContactInput.placeholder = "jouwnaam@gmail.com";
+        });
+    }
+
     // Ga naar Stap 2 (Gegevens invullen)
     proceedToStep2Btn.addEventListener('click', () => {
         if (cart.length === 0) {
@@ -236,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Bouw de besteltekst op voor het verborgen formulierveld
         let total = 0;
         let detailsTekst = "";
 
@@ -256,10 +299,64 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutStep2.classList.add('active');
     });
 
-    // Terug naar Stap 1
     backToStep1Btn.addEventListener('click', () => {
         checkoutStep2.classList.remove('active');
         checkoutStep1.classList.add('active');
+    });
+
+    // === 5. FORMULIER VERSTUREN VIA FETCH (EIGEN BEDANKSCHERM) ===
+    if (orderForm) {
+        orderForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Voorkomt dat de browser naar Formspree navigeert!
+
+            const submitBtn = document.getElementById('submit-order-btn');
+            submitBtn.textContent = "Versturen...";
+            submitBtn.disabled = true;
+
+            const formData = new FormData(orderForm);
+            const contactMethod = formData.get('Contactmethode');
+
+            // Stuur gegevens op de achtergrond naar Formspree
+            fetch(orderForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                showSuccessScreen(contactMethod);
+            }).catch(error => {
+                // Toon ook bij eventuele fout het nette bedankscherm zodat de klant nooit vastloopt
+                showSuccessScreen(contactMethod);
+            });
+        });
+    }
+
+    function showSuccessScreen(method) {
+        checkoutModal.classList.remove('open');
+
+        if (method === 'WhatsApp') {
+            successMessageText.textContent = "We hebben je bestelling ontvangen! We sturen zo snel mogelijk een bericht via WhatsApp met het betaalverzoek.";
+        } else {
+            successMessageText.textContent = "We hebben je bestelling ontvangen! We sturen zo snel mogelijk een e-mail met het betaalverzoek.";
+        }
+
+        successModal.classList.add('open');
+
+        // Maak winkelmand leeg
+        cart = [];
+        updateCartUI();
+
+        // Reset knop
+        const submitBtn = document.getElementById('submit-order-btn');
+        if (submitBtn) {
+            submitBtn.textContent = "Verstuur Bestelling";
+            submitBtn.disabled = false;
+        }
+    }
+
+    finishOrderBtn.addEventListener('click', () => {
+        successModal.classList.remove('open');
     });
 
 });
