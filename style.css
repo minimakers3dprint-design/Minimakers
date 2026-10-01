@@ -40,7 +40,7 @@ body.cart-open {
 .site-header {
     background: var(--bg-dark);
     color: white;
-    padding-bottom: 40px;
+    padding-bottom: 30px;
 }
 
 .top-bar {
@@ -71,7 +71,7 @@ body.cart-open {
 }
 
 .header-main {
-    padding: 40px 20px 10px;
+    padding: 30px 20px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -81,7 +81,7 @@ body.cart-open {
 
 .brand-title {
     font-size: 2.8rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -1px;
     background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
     -webkit-background-clip: text;
@@ -91,7 +91,7 @@ body.cart-open {
 .brand-subtitle {
     color: #94a3b8;
     font-size: 1.05rem;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 .cart-trigger-btn {
@@ -135,15 +135,16 @@ body.cart-open {
 
 /* Controls / Filter Sectie */
 .controls-section {
-    margin-top: -30px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .filter-card {
     background: white;
     padding: 16px 24px;
     border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
@@ -200,10 +201,6 @@ body.cart-open {
     font-weight: 700;
 }
 
-.section-header p {
-    color: var(--text-muted);
-}
-
 /* Producten Grid */
 .products-grid {
     display: grid;
@@ -212,7 +209,6 @@ body.cart-open {
     margin-bottom: 60px;
 }
 
-/* Product Card */
 .product-card {
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -249,6 +245,7 @@ body.cart-open {
     transform: scale(1.05);
 }
 
+/* BADGES (Populair & Premium) */
 .badge {
     position: absolute;
     top: 12px;
@@ -259,6 +256,7 @@ body.cart-open {
     font-weight: 600;
     padding: 4px 10px;
     border-radius: 20px;
+    z-index: 2;
 }
 
 .badge.premium {
@@ -282,19 +280,12 @@ body.cart-open {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--primary-hover);
-    margin-bottom: 4px;
-}
-
-.material-tag {
-    font-size: 0.8rem;
-    color: var(--text-muted);
     margin-bottom: 12px;
 }
 
-/* Groep van kleuropties */
 .color-select-group {
     margin-top: auto;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -513,7 +504,7 @@ body.cart-open {
     padding: 16px;
 }
 
-/* Modal Styling & Tweestaps Afrekenen */
+/* Modals */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -637,7 +628,6 @@ body.cart-open {
     margin-bottom: 20px;
 }
 
-/* Toggle Knoppen voor Contactmethode */
 .contact-method-toggle {
     display: flex;
     gap: 10px;
@@ -672,7 +662,6 @@ body.cart-open {
     color: var(--primary-hover);
 }
 
-/* Success Modal Icon */
 .success-icon-circle {
     width: 64px;
     height: 64px;
@@ -780,27 +769,4 @@ body.cart-open {
     margin-top: 8px;
     font-size: 0.8rem;
     opacity: 0.6;
-}
-
-/* Toast Notificatie */
-.toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: var(--bg-dark);
-    color: white;
-    padding: 14px 24px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-lg);
-    font-weight: 500;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-    z-index: 3000;
-    border-left: 4px solid var(--primary);
-}
-
-.toast.show {
-    transform: translateY(0);
-    opacity: 1;
 }

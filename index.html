@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimakers | Premium 3D Prints</title>
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo.png?v=2">
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -42,7 +37,6 @@
                 <p class="brand-subtitle">Uw 3D-geprinte spullen voor een lage prijs</p>
             </div>
             
-            <!-- Winkelmand Knop -->
             <button id="open-cart-btn" class="cart-trigger-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="21" r="1"></circle>
@@ -82,12 +76,10 @@
     <main class="main-content container">
         <div class="section-header">
             <h2>Onze Collectie</h2>
-            <p>Handgemaakt, duurzaam en direct klaar voor verzending.</p>
         </div>
 
         <div class="products-grid">
-
-            <!-- Product 1: Multiclicker (1 Kleurkeuze) -->
+            <!-- Product 1: Multiclicker (Met Populair Badge) -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="mmm.jpg" alt="Multiclicker" class="product-image">
@@ -96,7 +88,6 @@
                 <div class="card-content">
                     <h3 class="product-title">Multiclicker</h3>
                     <div class="price-tag">€2,50</div>
-                    <div class="material-tag">🌱 Materiaal: Duurzaam PLA</div>
 
                     <div class="color-select-group">
                         <div class="color-select">
@@ -119,7 +110,7 @@
                 </div>
             </article>
 
-            <!-- Product 2: Bobatea Switch (1 Kleurkeuze) -->
+            <!-- Product 2: Bobatea Switch -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="bobatea.jpg" alt="Bobatea Switch" class="product-image">
@@ -127,7 +118,6 @@
                 <div class="card-content">
                     <h3 class="product-title">Bobatea Switch</h3>
                     <div class="price-tag">€2,50</div>
-                    <div class="material-tag">🌱 Materiaal: Duurzaam PLA</div>
 
                     <div class="color-select-group">
                         <div class="color-select">
@@ -150,7 +140,7 @@
                 </div>
             </article>
 
-            <!-- Product 3: Schakelfidget (1 Kleurkeuze) -->
+            <!-- Product 3: Schakelfidget -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="schakel.jpg" alt="Schakelfidget" class="product-image">
@@ -158,7 +148,6 @@
                 <div class="card-content">
                     <h3 class="product-title">Schakelfidget</h3>
                     <div class="price-tag">€2,50</div>
-                    <div class="material-tag">🌱 Materiaal: Duurzaam PLA</div>
 
                     <div class="color-select-group">
                         <div class="color-select">
@@ -181,7 +170,7 @@
                 </div>
             </article>
 
-            <!-- Product 4: Pistachio Bowl (DUBBELE KLEURKEUZE: Buitenkant & Binnenkant) -->
+            <!-- Product 4: Pistachio Bowl (Met Premium Badge) -->
             <article class="product-card" data-category="woondecoratie">
                 <div class="card-image-wrapper">
                     <img src="pistachio.jpg" alt="Pistachio Bowl" class="product-image">
@@ -190,9 +179,7 @@
                 <div class="card-content">
                     <h3 class="product-title">Pistachio Bowl</h3>
                     <div class="price-tag">€10,00</div>
-                    <div class="material-tag">🌱 Materiaal: Duurzaam PLA</div>
 
-                    <!-- Meerdere Kleuropties -->
                     <div class="color-select-group">
                         <div class="color-select">
                             <label>1. Kleur buitenkant bowl:</label>
@@ -228,7 +215,6 @@
                     <button class="btn add-to-cart-btn" data-id="4" data-name="Pistachio Bowl" data-price="10.00" data-image="pistachio.jpg">In winkelmand</button>
                 </div>
             </article>
-
         </div>
     </main>
 
@@ -247,7 +233,7 @@
             <h2>Jouw Winkelmand</h2>
             <button id="close-cart-btn" class="close-cart-btn">&times;</button>
         </div>
-        
+
         <div id="cart-items-container" class="cart-items-container">
             <p class="empty-cart-msg">Je winkelmand is nog leeg.</p>
         </div>
@@ -283,14 +269,11 @@
         <div class="modal-card modal-large">
             <button id="close-modal-btn" class="close-modal-btn">&times;</button>
             
-            <!-- STAP 1: OVERZICHT & AANPASSEN -->
             <div id="checkout-step-1" class="checkout-step active">
                 <h3>Controleer je bestelling</h3>
                 <p>Controleer en wijzig hier je gekozen artikelen voordat je je gegevens invult.</p>
                 
-                <div id="checkout-review-items" class="review-items-list">
-                    <!-- Items komen hier -->
-                </div>
+                <div id="checkout-review-items" class="review-items-list"></div>
 
                 <div class="review-total-box">
                     <span>Totaalbedrag:</span>
@@ -303,20 +286,19 @@
                 </div>
             </div>
 
-            <!-- STAP 2: GEGEVENS INVULLEN (DYNAMISCH CONTACT) -->
             <div id="checkout-step-2" class="checkout-step">
                 <button id="back-to-step-1-btn" class="back-link">&larr; Terug naar overzicht</button>
                 <h3>Gegevens invullen</h3>
                 <p>Kies eerst hoe je benaderd wilt worden voor de bestelling en het betaalverzoek.</p>
 
-                <form id="order-form" action="https://formspree.io/f/xbjvn83d" method="POST" class="order-form">
+                <!-- GEÜPDATETE FORMSPEE LINK -->
+                <form id="order-form" action="https://formspree.io/f/mdekvyqa" method="POST" class="order-form">
                     
                     <div class="form-group">
                         <label for="customer-name">Naam *</label>
                         <input type="text" id="customer-name" name="Naam" required placeholder="Jouw volledige naam">
                     </div>
 
-                    <!-- KEUZE CONTACTMETHODE (Klant kiest EERST) -->
                     <div class="form-group">
                         <label>Hoe wil je benaderd worden? *</label>
                         <div class="contact-method-toggle">
@@ -331,7 +313,6 @@
                         </div>
                     </div>
 
-                    <!-- DYNAMISCH INVOERVELD (Past aan op basis van bovenstaande keuze) -->
                     <div class="form-group">
                         <label id="contact-input-label" for="customer-contact">Telefoonnummer (WhatsApp) *</label>
                         <input type="tel" id="customer-contact" name="Contactgegevens" required placeholder="06 12345678">
@@ -342,11 +323,10 @@
                     <button type="submit" id="submit-order-btn" class="btn submit-order-btn">Verstuur Bestelling</button>
                 </form>
             </div>
-
         </div>
     </div>
 
-    <!-- POP-UP 3: EIGEN BEDANKSCHERM (Geen lelijke Formspree foutpagina meer!) -->
+    <!-- POP-UP 3: EIGEN BEDANKSCHERM -->
     <div id="success-modal" class="modal-overlay">
         <div class="modal-card text-center">
             <div class="success-icon-circle">
@@ -360,9 +340,6 @@
             <button id="finish-order-btn" class="btn btn-primary" style="margin-top: 20px;">Terug naar de webshop</button>
         </div>
     </div>
-
-    <!-- Toast notificatie -->
-    <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
 </body>

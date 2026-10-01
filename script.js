@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // === 1. ZOEK EN FILTER LOGICA ===
+    // === PERSISTENTE WINKELMAND (localStorage) ===
+    let cart = JSON.parse(localStorage.getItem('minimakers_cart')) || [];
+
+    function saveCart() {
+        localStorage.setItem('minimakers_cart', JSON.stringify(cart));
+    }
+
+    // === ZOEK EN FILTER LOGICA ===
     const searchInput = document.getElementById('search-input');
     const categorySelect = document.getElementById('category-select');
     const productCards = document.querySelectorAll('.product-card');
@@ -28,9 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (categorySelect) categorySelect.addEventListener('change', filterProducts);
 
 
-    // === 2. WINKELMAND LOGICA ===
-    let cart = [];
-
+    // === WINKELMAND LOGICA ===
     const openCartBtn = document.getElementById('open-cart-btn');
     const closeCartBtn = document.getElementById('close-cart-btn');
     const cartOverlay = document.getElementById('cart-overlay');
@@ -88,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Je winkelmand is nog leeg.</p>';
             cartBadge.textContent = '0';
             cartTotalPrice.textContent = '€0,00';
+            saveCart();
             return;
         }
 
@@ -114,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartBadge.textContent = totalItemsCount;
 
+        saveCart();
+
         document.querySelectorAll('.remove-item-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const indexToRemove = e.target.getAttribute('data-index');
@@ -124,13 +132,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Product toevoegen met verwerking van MEERDERE kleuropties
+    // Product toevoegen
     const addButtons = document.querySelectorAll('.add-to-cart-btn');
     addButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
             
-            // Verzamelt alle geselecteerde kleuren binnen deze kaart
             const colorSelects = card.querySelectorAll('.select-box');
             let colorStringArray = [];
 
@@ -171,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openCheckoutModal();
     });
 
-    // === 3. TWEESTAPS AFREKENEN LOGICA ===
+    // TWEESTAPS AFREKENEN LOGICA
     function renderReviewItems() {
         if (!checkoutReviewItems) return;
         checkoutReviewItems.innerHTML = '';
@@ -245,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModalBtn.addEventListener('click', () => checkoutModal.classList.remove('open'));
     backToShopBtn.addEventListener('click', () => checkoutModal.classList.remove('open'));
 
-    // === 4. DYNAMISCHE CONTACTMETHODE LOGICA ===
+    // DYNAMISCHE CONTACTMETHODE
     const optionWhatsapp = document.getElementById('option-whatsapp');
     const optionEmail = document.getElementById('option-email');
     const contactInputLabel = document.getElementById('contact-input-label');
@@ -273,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Ga naar Stap 2 (Gegevens invullen)
     proceedToStep2Btn.addEventListener('click', () => {
         if (cart.length === 0) {
             alert("Voeg eerst producten toe aan je winkelmand!");
@@ -304,10 +310,10 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutStep1.classList.add('active');
     });
 
-    // === 5. FORMULIER VERSTUREN VIA FETCH (EIGEN BEDANKSCHERM) ===
+    // FORMULIER VERSTUREN VIA FETCH
     if (orderForm) {
         orderForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Voorkomt dat de browser naar Formspree navigeert!
+            e.preventDefault();
 
             const submitBtn = document.getElementById('submit-order-btn');
             submitBtn.textContent = "Versturen...";
@@ -316,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(orderForm);
             const contactMethod = formData.get('Contactmethode');
 
-            // Stuur gegevens op de achtergrond naar Formspree
             fetch(orderForm.action, {
                 method: 'POST',
                 body: formData,
@@ -326,7 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(response => {
                 showSuccessScreen(contactMethod);
             }).catch(error => {
-                // Toon ook bij eventuele fout het nette bedankscherm zodat de klant nooit vastloopt
                 showSuccessScreen(contactMethod);
             });
         });
@@ -343,11 +347,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         successModal.classList.add('open');
 
-        // Maak winkelmand leeg
         cart = [];
         updateCartUI();
 
-        // Reset knop
         const submitBtn = document.getElementById('submit-order-btn');
         if (submitBtn) {
             submitBtn.textContent = "Verstuur Bestelling";
@@ -358,5 +360,8 @@ document.addEventListener('DOMContentLoaded', () => {
     finishOrderBtn.addEventListener('click', () => {
         successModal.classList.remove('open');
     });
+
+    // Initialiseer winkelmand bij het laden van de pagina
+    updateCartUI();
 
 });
