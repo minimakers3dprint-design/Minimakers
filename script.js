@@ -310,24 +310,56 @@ document.addEventListener('DOMContentLoaded', () => {
         checkoutStep1.classList.add('active');
     });
 
-    // FORMULIER VERSTUREN VIA FETCH
+                   // FORMULIER VERSTUREN NAAR SHEETMONKEY EN E-MAIL
     if (orderForm) {
         orderForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const submitBtn = document.getElementById('submit-order-btn');
-            submitBtn.textContent = "Versturen...";
+            submitBtn.textContent = "Bestelling plaatsen...";
             submitBtn.disabled = true;
 
             const formData = new FormData(orderForm);
             const contactMethod = formData.get('Contactmethode');
+            const customerName = formData.get('Naam');
+            const customerContact = formData.get('Contactgegevens');
+
+            let total = 0;
+            let detailsTekst = "";
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                detailsTekst += `${item.quantity}x ${item.name} (${item.color}) - €${itemTotal.toFixed(2).replace('.', ',')}\n`;
+            });
+
+            detailsTekst += `\nTotaalbedrag: €${total.toFixed(2).replace('.', ',')}`;
+            
+            if (cartDetailsInput) {
+                cartDetailsInput.value = detailsTekst;
+            }
+
+            // 1. Stuur naar SheetMonkey (voor de Google Spreadsheet)
+            const sheetMonkeyData = new FormData(orderForm);
 
             fetch(orderForm.action, {
                 method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                body: sheetMonkeyData,
+                headers: { 'Accept': 'application/json' }
+            }).catch(err => console.log('Sheet sent'));
+
+            // 2. Stuur direct een e-mail naar jou (minimakers3dprint@gmail.com) via Web3Forms
+            const emailData = new FormData();
+            emailData.append('access_key', 'e1c6c373-1e32-4e71-bb0c-0f94cbcdd270'); // Plak hier jouw eigen gratis code tussen de quotes!
+            emailData.append('subject', `Nieuwe bestelling van ${customerName}!`);
+            emailData.append('Naam', customerName);
+            emailData.append('Voorkeur contact', contactMethod);
+            emailData.append('Contactgegevens', customerContact);
+            emailData.append('Bestelling', detailsTekst);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: emailData
             }).then(response => {
                 showSuccessScreen(contactMethod);
             }).catch(error => {
@@ -336,6 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+            
     function showSuccessScreen(method) {
         checkoutModal.classList.remove('open');
 
