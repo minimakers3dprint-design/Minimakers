@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimakers | Premium 3D Prints</title>
@@ -11,7 +12,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <!-- Header & Socials Bar -->
     <header class="site-header">
         <div class="top-bar">
@@ -37,7 +37,6 @@
                 </a>
             </div>
         </div>
-
         <div class="header-main container">
             <div class="brand-container">
                 <h1 class="brand-title">Minimakers</h1>
@@ -55,6 +54,26 @@
             </button>
         </div>
     </header>
+
+    <!-- WhatsApp & YouTube Promotie Banner -->
+    <section class="channels-banner-section container">
+        <div class="channels-promo-card">
+            <div class="channels-text">
+                <h3>📢 Blijf op de hoogte van nieuwe 3D-prints!</h3>
+                <p>Word lid van ons WhatsApp-kanaal voor exclusieve updates, nieuwe producten en sneak peeks!</p>
+            </div>
+            <div class="channels-buttons">
+                <a href="https://whatsapp.com/channel/0029VbBbe716rsQy2q04rj1b" target="_blank" rel="noopener" class="btn-channel whatsapp-glow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.012 2c-5.508 0-9.989 4.481-9.989 9.989 0 1.964.57 3.828 1.637 5.417L2 22l4.735-1.579a9.923 9.923 0 005.277 1.488h.004c5.507 0 9.988-4.481 9.988-9.989 0-2.668-1.039-5.176-2.927-7.064C17.189 3.039 14.68 2 12.012 2z"/></svg>
+                    Volg het WhatsApp-kanaal
+                </a>
+                <a href="https://youtube.com/@minimakers3d123?si=Cys41rAasxSt8Ieu" target="_blank" rel="noopener" class="btn-channel youtube-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/></svg>
+                    YouTube
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Zoekbalk & Filter Hero Section -->
     <section class="controls-section">
@@ -84,8 +103,13 @@
         <div class="section-header">
             <h2>Onze Collectie</h2>
         </div>
-
+        
         <div class="products-grid">
+            <!-- CATEGORIE: Fidgets -->
+            <div class="category-header">
+                <h2>🧩 Fidgets</h2>
+                <div class="category-line"></div>
+            </div>
             
             <!-- 1. Multiclicker -->
             <article class="product-card" data-category="fidgets">
@@ -147,35 +171,8 @@
                     <button class="btn add-to-cart-btn" data-id="3" data-name="Schakelfidget" data-price="2.50" data-image="schakel.jpg">In winkelmand</button>
                 </div>
             </article>
-
-            <!-- 4. Pistachio Bowl -->
-            <article class="product-card" data-category="woondecoratie">
-                <div class="card-image-wrapper">
-                    <img src="pistachio.jpg" alt="Pistachio Bowl" class="product-image">
-                    <span class="badge premium">Premium</span>
-                </div>
-                <div class="card-content">
-                    <h3 class="product-title">Pistachio Bowl</h3>
-                    <div class="price-tag">€10,00</div>
-                    <div class="color-select-group">
-                        <div class="color-select">
-                            <label>1. Kleur buitenkant bowl:</label>
-                            <select class="select-box" data-color-label="Buitenkant">
-                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
-                            </select>
-                        </div>
-                        <div class="color-select">
-                            <label>2. Kleur binnenkant bakje:</label>
-                            <select class="select-box" data-color-label="Binnenkant">
-                                <option value="Wit">Wit</option><option value="Zwart">Zwart</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn add-to-cart-btn" data-id="4" data-name="Pistachio Bowl" data-price="10.00" data-image="pistachio.jpg">In winkelmand</button>
-                </div>
-            </article>
-
-            <!-- 5. Joy Fidget -->
+           
+            <!-- 4. Joy Fidget -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="joy.jpg" alt="Joy Fidget" class="product-image">
@@ -201,7 +198,7 @@
                 </div>
             </article>
 
-            <!-- 6. Spiraal Fidget -->
+            <!-- 5. Spiraal Fidget -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="spiraal.jpg" alt="Spiraal Fidget" class="product-image">
@@ -227,7 +224,7 @@
                 </div>
             </article>
 
-            <!-- 7. Hexagon Fidget -->
+            <!-- 6. Hexagon Fidget -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="hexagon.jpg" alt="Hexagon Fidget" class="product-image">
@@ -247,7 +244,7 @@
                 </div>
             </article>
 
-            <!-- 8. Vlieginator -->
+            <!-- 7. Vlieginator -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="vlieginator.jpg" alt="Vlieginator" class="product-image">
@@ -267,7 +264,7 @@
                 </div>
             </article>
 
-            <!-- 9. Infinity Cube -->
+            <!-- 8. Infinity Cube -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="cube.jpg" alt="Infinity Cube" class="product-image">
@@ -287,7 +284,7 @@
                 </div>
             </article>
 
-            <!-- 10. Infinity Ball -->
+            <!-- 9. Infinity Ball -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="ball.jpg" alt="Infinity Ball" class="product-image">
@@ -307,7 +304,7 @@
                 </div>
             </article>
 
-            <!-- 11. Gyro Ring -->
+            <!-- 10. Gyro Ring -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="gyro.jpg" alt="Gyro Ring" class="product-image">
@@ -327,7 +324,7 @@
                 </div>
             </article>
 
-            <!-- 12. Pop Up Fidget -->
+            <!-- 11. Pop Up Fidget -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="pop.jpg" alt="Pop Up Fidget" class="product-image">
@@ -347,7 +344,7 @@
                 </div>
             </article>
 
-            <!-- 13. Toggle Switch -->
+            <!-- 12. Toggle Switch -->
             <article class="product-card" data-category="fidgets">
                 <div class="card-image-wrapper">
                     <img src="toggle.jpg" alt="Toggle Switch" class="product-image">
@@ -366,6 +363,298 @@
                     <button class="btn add-to-cart-btn" data-id="13" data-name="Toggle Switch" data-price="1.00" data-image="togglel.jpg">In winkelmand</button>
                 </div>
             </article>
+
+            <!-- CATEGORIE: GADGETS -->
+            <div class="category-header">
+                <h2>⚙️ Gadgets</h2>
+                <div class="category-line"></div>
+            </div>
+
+            <!-- Pistache Bowl -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="pistachio.jpg" alt="Pistache Bowl" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Pistache Bowl</h3>
+                    <div class="price-tag">€10,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="14" data-name="Pistache Bowl" data-price="10.00" data-image="pistachio.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Toohtpaste Squeezer -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="squeezer.jpg" alt="Toohtpaste Squeezer" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Toohtpaste Squeezer</h3>
+                    <div class="price-tag">€1,50</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Phone Holder -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="phone.jpg" alt="Phone Holder" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Phone Holder</h3>
+                    <div class="price-tag">€1,50</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Can opener -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="can.jpg" alt="Can Opener" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Can Opener</h3>
+                    <div class="price-tag">€1,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Balloon Helper -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="balloon.jpg" alt="Balloon Helper" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Balloon Helper</h3>
+                    <div class="price-tag">€1,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Card Holder -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="card.jpg" alt="Card Holder" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Card Holder</h3>
+                    <div class="price-tag">€3,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Chopstick Helper -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="chopstick.jpg" alt="Chopstick Helper" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Chopstick Helper</h3>
+                    <div class="price-tag">€1,50</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Fruit Washer -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="fruit.jpg" alt="Fruit Washer" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Fruit Washer</h3>
+                    <div class="price-tag">€7,50</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Egg Seperator -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="egg.jpg" alt="Egg Seperator" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Egg Seperator</h3>
+                    <div class="price-tag">€2,50</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Key Organizer -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="key.jpg" alt="Key Organizer" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Key Organizer</h3>
+                    <div class="price-tag">€10,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Pringles Tray -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="pringles.jpg" alt="Pringles Tray" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Pringles Tray</h3>
+                    <div class="price-tag">€5,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+            
+            <!-- Charge Shelf -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="shelf.jpg" alt="Charge Shelf" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Charge Shelf</h3>
+                    <div class="price-tag">€2,50</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- Toilet Paper Holder -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="toilet.jpg" alt="Toilet Paper Holder" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">Toilet Paper Holder</h3>
+                    <div class="price-tag">€5,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+
+            <!-- 2 in 1 Organizer -->
+            <article class="product-card" data-category="Gadgets">
+                <div class="card-image-wrapper">
+                    <img src="watten.jpg" alt="Egg Seperator" class="product-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">2 in 1 Organizer</h3>
+                    <div class="price-tag">€5,00</div>
+                    <div class="color-select-group">
+                        <div class="color-select">
+                            <label>Kies kleur filament:</label>
+                            <select class="select-box" data-color-label="Kleur">
+                                <option value="Zwart">Zwart</option><option value="Wit">Wit</option><option value="Rood">Rood</option><option value="Groen">Groen</option><option value="Oranje">Oranje</option><option value="Donkerblauw">Donkerblauw</option><option value="Lichtblauw">Lichtblauw</option><option value="Grijs">Grijs</option><option value="Bruin">Bruin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="15" data-name="Phone Holder" data-price="1.50" data-image="phone.jpg">In winkelmand</button>
+                </div>
+            </article>
+            
+            <!-- CATEGORIE: FEESTDAGEN -->
+            <div class="category-header">
+                <h2>🎄 Feestdagen</h2>
+                <div class="category-line"></div>
+            </div>
 
         </div>
     </main>
@@ -397,7 +686,7 @@
         </div>
     </div>
 
-    <!-- POP-UP 1: Keuze tussen Verder winkelen of Afrekenen -->
+    <!-- POP-UP 1 -->
     <div id="choice-modal" class="modal-overlay">
         <div class="modal-card text-center">
             <button id="close-choice-btn" class="close-modal-btn">&times;</button>
@@ -411,7 +700,7 @@
         </div>
     </div>
 
-    <!-- POP-UP 2: Tweestaps Afrekenen -->
+    <!-- POP-UP 2 -->
     <div id="checkout-modal" class="modal-overlay">
         <div class="modal-card modal-large">
             <button id="close-modal-btn" class="close-modal-btn">&times;</button>
@@ -429,13 +718,11 @@
                     <button id="proceed-to-step-2-btn" class="btn btn-primary">Volgende: Gegevens invullen &rarr;</button>
                 </div>
             </div>
-
             <div id="checkout-step-2" class="checkout-step">
                 <button id="back-to-step-1-btn" class="back-link">&larr; Terug naar overzicht</button>
                 <h3>Gegevens invullen</h3>
                 <p>Kies eerst hoe je benaderd wilt worden voor de bestelling en het betaalverzoek.</p>
-
-                                <form id="order-form" action="https://api.sheetmonkey.io/form/hivoKphDtEn4cWJfndjEiS" method="POST" class="order-form">
+                <form id="order-form" action="https://api.sheetmonkey.io/form/hivoKphDtEn4cWJfndjEiS" method="POST" class="order-form">
                     <div class="form-group">
                         <label for="customer-name">Naam *</label>
                         <input type="text" id="customer-name" name="Naam" required placeholder="Jouw volledige naam">
@@ -460,8 +747,11 @@
                     <input type="hidden" id="cart-details-input" name="Bestelling">
                     <button type="submit" id="submit-order-btn" class="btn submit-order-btn">Verstuur Bestelling</button>
                 </form>
+            </div>
+        </div>
+    </div>
 
-    <!-- POP-UP 3: EIGEN BEDANKSCHERM -->
+    <!-- POP-UP 3 -->
     <div id="success-modal" class="modal-overlay">
         <div class="modal-card text-center">
             <div class="success-icon-circle">
@@ -471,7 +761,15 @@
             </div>
             <h3>Bedankt voor je bestelling!</h3>
             <p id="success-message-text">We hebben je bestelling in goede orde ontvangen. We nemen zo snel mogelijk contact met je op voor het betaalverzoek.</p>
-            <button id="finish-order-btn" class="btn btn-primary" style="margin-top: 20px;">Terug naar de webshop</button>
+            
+            <div class="success-whatsapp-box">
+                <p><strong>Wil je geen updates missen?</strong> Volg ons direct op WhatsApp:</p>
+                <a href="https://whatsapp.com/channel/0029VbBbe716rsQy2q04rj1b" target="_blank" rel="noopener" class="btn btn-whatsapp-full">
+                    📱 Neem een kijkje op ons WhatsApp-kanaal
+                </a>
+            </div>
+
+            <button id="finish-order-btn" class="btn btn-primary" style="margin-top: 15px;">Terug naar de webshop</button>
         </div>
     </div>
 
