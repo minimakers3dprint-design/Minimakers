@@ -715,6 +715,14 @@
                 <h3>Controleer je bestelling</h3>
                 <p>Controleer en wijzig hier je gekozen artikelen voordat je je gegevens invult.</p>
                 <div id="checkout-review-items" class="review-items-list"></div>
+
+                <!-- Kortingscode Veld -->
+                <div class="coupon-wrapper">
+                    <input type="text" id="coupon-input" placeholder="Kortingscode" style="text-transform: uppercase;">
+                    <button type="button" id="apply-coupon-btn" class="btn btn-secondary">Toepassen</button>
+                </div>
+                <p id="coupon-message" class="coupon-message"></p>
+
                 <div class="review-total-box">
                     <span>Totaalbedrag:</span>
                     <strong id="review-total-price">€0,00</strong>
@@ -766,7 +774,7 @@
                 </svg>
             </div>
             <h3>Bedankt voor je bestelling!</h3>
-            <p id="success-message-text">We hebben je bestelling in goede orde ontvangen. We nemen zo snel mogelijk contact met je op voor het betaalverzoek.</p>
+            <p id="success-message-text">Zodra we bezig zijn met je bestelling, sturen we je een berichtje met een betaalverzoek.</p>
             
             <div class="success-whatsapp-box">
                 <p><strong>Wil je geen updates missen?</strong> Volg ons direct op WhatsApp:</p>

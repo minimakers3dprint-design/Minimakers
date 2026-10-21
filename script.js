@@ -1,7 +1,12 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    // === PERSISTENTE WINKELMAND ===
+    // === PERSISTENTE WINKELMAND & KORTING ===
     let cart = [];
+    let appliedDiscount = { code: '', percentage: 0, fixedAmount: 0 };
+
+    // Beschikbare kortingscodes (Voeg hier eenvoudig meer codes toe!)
+    const VALID_COUPONS = {
+        'FAMILIE': { percentage: 100, fixedAmount: 0, label: '100% korting' },
+    };
 
     try {
         const savedCart = JSON.parse(localStorage.getItem('minimakers_cart') || '[]');
@@ -65,6 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToStep1Btn = document.getElementById('back-to-step-1-btn');
     const cartDetailsInput = document.getElementById('cart-details-input');
     const orderForm = document.getElementById('order-form');
+
+    const couponInput = document.getElementById('coupon-input');
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    const couponMessage = document.getElementById('coupon-message');
 
     const successModal = document.getElementById('success-modal');
     const finishOrderBtn = document.getElementById('finish-order-btn');
@@ -177,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
         saveCart();
     }
 
-    // Eén klikhandler blijft werken, ook als de winkelmand opnieuw wordt getekend.
     if (cartItemsContainer) {
         cartItemsContainer.addEventListener('click', event => {
             const button = event.target.closest('.remove-item-btn');
@@ -244,12 +252,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // === KORTINGSCODE LOGICA ===
+    if (applyCouponBtn && couponInput) {
+        applyCouponBtn.addEventListener('click', () => {
+            const code = couponInput.value.trim().toUpperCase();
+
+            if (!code) {
+                couponMessage.textContent = 'Vul een kortingscode in.';
+                couponMessage.className = 'coupon-message error';
+                return;
+            }
+
+            if (VALID_COUPONS[code]) {
+                appliedDiscount = {
+                    code: code,
+                    ...VALID_COUPONS[code]
+                };
+                couponMessage.textContent = `Kortingscode '${code}' toegepast (${appliedDiscount.label})!`;
+                couponMessage.className = 'coupon-message success';
+                renderReviewItems();
+            } else {
+                appliedDiscount = { code: '', percentage: 0, fixedAmount: 0 };
+                couponMessage.textContent = 'Ongeldige kortingscode.';
+                couponMessage.className = 'coupon-message error';
+                renderReviewItems();
+            }
+        });
+    }
+
     // === AFREKENOVERZICHT ===
     function renderReviewItems() {
         if (!checkoutReviewItems) return;
 
         checkoutReviewItems.innerHTML = '';
-        let total = 0;
+        let subtotal = 0;
 
         if (cart.length === 0) {
             checkoutReviewItems.innerHTML =
@@ -265,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cart.forEach((item, index) => {
             const itemPrice = Number(item.price) || 0;
             const quantity = Math.max(1, Number(item.quantity) || 1);
-            total += itemPrice * quantity;
+            subtotal += itemPrice * quantity;
 
             const div = document.createElement('div');
             div.className = 'review-item';
@@ -315,7 +351,23 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutReviewItems.appendChild(div);
         });
 
-        if (reviewTotalPrice) reviewTotalPrice.textContent = formatPrice(total);
+        // Berekend eindbedrag inclusief eventuele korting
+        let discountAmount = 0;
+        if (appliedDiscount.percentage > 0) {
+            discountAmount = subtotal * (appliedDiscount.percentage / 100);
+        } else if (appliedDiscount.fixedAmount > 0) {
+            discountAmount = appliedDiscount.fixedAmount;
+        }
+
+        const finalTotal = Math.max(0, subtotal - discountAmount);
+
+        if (reviewTotalPrice) {
+            if (discountAmount > 0) {
+                reviewTotalPrice.innerHTML = `<span style="text-decoration: line-through; font-size: 0.9rem; color: #94a3b8; margin-right: 6px;">${formatPrice(subtotal)}</span> ${formatPrice(finalTotal)}`;
+            } else {
+                reviewTotalPrice.textContent = formatPrice(finalTotal);
+            }
+        }
     }
 
     if (checkoutReviewItems) {
@@ -413,11 +465,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `${item.quantity}x ${item.name} (${item.color}) - ${formatPrice(itemTotal)}`;
             });
 
-            const total = cart.reduce(
+            const subtotal = cart.reduce(
                 (sum, item) => sum + item.price * item.quantity, 0
             );
 
-            details.push('', `Totaalbedrag: ${formatPrice(total)}`);
+            let discountAmount = 0;
+            if (appliedDiscount.percentage > 0) {
+                discountAmount = subtotal * (appliedDiscount.percentage / 100);
+            } else if (appliedDiscount.fixedAmount > 0) {
+                discountAmount = appliedDiscount.fixedAmount;
+            }
+
+            const finalTotal = Math.max(0, subtotal - discountAmount);
+
+            details.push('');
+            details.push(`Subtotaal: ${formatPrice(subtotal)}`);
+
+            if (appliedDiscount.code) {
+                details.push(`Kortingscode (${appliedDiscount.code}): -${formatPrice(discountAmount)}`);
+            }
+
+            details.push(`Totaalbedrag: ${formatPrice(finalTotal)}`);
 
             if (cartDetailsInput) cartDetailsInput.value = details.join('\n');
 
@@ -458,11 +526,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `${item.quantity}x ${item.name} (${item.color}) - ${formatPrice(itemTotal)}`;
             });
 
-            const total = cart.reduce(
+            const subtotal = cart.reduce(
                 (sum, item) => sum + item.price * item.quantity, 0
             );
 
-            details.push('', `Totaalbedrag: ${formatPrice(total)}`);
+            let discountAmount = 0;
+            if (appliedDiscount.percentage > 0) {
+                discountAmount = subtotal * (appliedDiscount.percentage / 100);
+            } else if (appliedDiscount.fixedAmount > 0) {
+                discountAmount = appliedDiscount.fixedAmount;
+            }
+
+            const finalTotal = Math.max(0, subtotal - discountAmount);
+
+            details.push('');
+            details.push(`Subtotaal: ${formatPrice(subtotal)}`);
+
+            if (appliedDiscount.code) {
+                details.push(`Kortingscode (${appliedDiscount.code}): -${formatPrice(discountAmount)}`);
+            }
+
+            details.push(`Totaalbedrag: ${formatPrice(finalTotal)}`);
             const detailsTekst = details.join('\n');
 
             if (cartDetailsInput) cartDetailsInput.value = detailsTekst;
@@ -518,13 +602,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (successMessageText) {
             successMessageText.textContent =
                 method === 'WhatsApp'
-                    ? 'We hebben je bestelling ontvangen! We sturen zo snel mogelijk een bericht via WhatsApp met het betaalverzoek.'
-                    : 'We hebben je bestelling ontvangen! We sturen zo snel mogelijk een e-mail met het betaalverzoek.';
+                    ? 'We hebben je bestelling in goede orde ontvangen! Zodra we bezig zijn met je bestelling, sturen we je een berichtje met een betaalverzoek via WhatsApp.'
+                    : 'We hebben je bestelling in goede orde ontvangen! Zodra we bezig zijn met je bestelling, sturen we je een berichtje met een betaalverzoek via e-mail.';
         }
 
         if (successModal) successModal.classList.add('open');
 
         cart = [];
+        appliedDiscount = { code: '', percentage: 0, fixedAmount: 0 };
+        if (couponInput) couponInput.value = '';
+        if (couponMessage) couponMessage.textContent = '';
+
         saveCart();
         updateCartUI();
         renderReviewItems();
