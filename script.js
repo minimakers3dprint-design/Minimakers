@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Beschikbare kortingscodes (Voeg hier eenvoudig meer codes toe!)
     const VALID_COUPONS = {
         'FAMILIE': { percentage: 100, fixedAmount: 0, label: '100% korting' },
+        'VRIENDENKORTING': { percentage: 5, fixedAmount: 0, label: '5% korting' },
     };
 
     try {
