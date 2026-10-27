@@ -79,12 +79,39 @@ body.cart-open {
     gap: 20px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav-about-btn {
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.nav-about-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
 .brand-title {
     font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -1px;
     background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -204,9 +231,21 @@ body.cart-open {
 /* Producten Grid */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
     margin-bottom: 60px;
+}
+
+@media (max-width: 800px) {
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .product-card {
@@ -218,7 +257,7 @@ body.cart-open {
     flex-direction: column;
     box-shadow: var(--shadow-sm);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-    max-width: 300px;
+    max-width: none;
 }
 
 .product-card:hover {
@@ -281,7 +320,15 @@ body.cart-open {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--primary-hover);
+    margin-bottom: 8px;
+}
+
+/* Product Beschrijving */
+.product-description {
+    font-size: 0.88rem;
+    color: var(--text-muted);
     margin-bottom: 12px;
+    line-height: 1.4;
 }
 
 .color-select-group {
@@ -929,4 +976,7 @@ body.cart-open {
 
 .coupon-message.error {
     color: #ef4444;
+}
+.header-actions a.nav-about-link:hover {
+    color: var(--primary);
 }

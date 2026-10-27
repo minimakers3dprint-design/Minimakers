@@ -2,6 +2,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // === PERSISTENTE WINKELMAND & KORTING ===
     let cart = [];
     let appliedDiscount = { code: '', percentage: 0, fixedAmount: 0 };
+    const PENDING_ORDER_KEY = 'minimakers_pending_order_v1';
+    let pendingOrder = null;
+
+    try {
+        pendingOrder = JSON.parse(localStorage.getItem(PENDING_ORDER_KEY) || 'null');
+    } catch (error) {
+        pendingOrder = null;
+    }
+
+    function savePendingOrder() {
+        try {
+            if (pendingOrder) {
+                localStorage.setItem(PENDING_ORDER_KEY, JSON.stringify(pendingOrder));
+            } else {
+                localStorage.removeItem(PENDING_ORDER_KEY);
+            }
+        } catch (error) {
+            // The order can still be sent if the browser blocks storage.
+        }
+    }
+
+    function createOrderId() {
+        return window.crypto && typeof window.crypto.randomUUID === 'function'
+            ? window.crypto.randomUUID()
+            : `mm-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+    }
 
     // Beschikbare kortingscodes (Voeg hier eenvoudig meer codes toe!)
     const VALID_COUPONS = {
@@ -212,14 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const product = {
                 id: button.getAttribute('data-id'),
                 name: button.getAttribute('data-name') || 'Product',
-                price: Number.parseFloat(button.getAttribute('data-price')) || 0,
+                price: Number.parseFloat((button.getAttribute('data-price') || '').replace(',', '.')) || 0,
                 image: button.getAttribute('data-image') || '',
                 color: colorStringArray.join(', '),
                 quantity: 1
             };
 
             const existingItem = cart.find(
-                item => item.id === product.id && item.color === product.color
+                item => item.id === product.id && item.name === product.name && item.color === product.color
             );
 
             if (existingItem) {
@@ -522,11 +548,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const customerName = formData.get('Naam');
             const customerContact = formData.get('Contactgegevens');
 
-            const details = cart.map(item => {
-                const itemTotal = item.price * item.quantity;
-                return `${item.quantity}x ${item.name} (${item.color}) - ${formatPrice(itemTotal)}`;
+            const items = cart.map(item => {
+                const quantity = Math.max(1, Number(item.quantity) || 1);
+                const unitPrice = Math.round((Number(item.price) || 0) * 100) / 100;
+                return {
+                    productId: String(item.id ?? ''),
+                    name: String(item.name ?? ''),
+                    color: String(item.color ?? ''),
+                    quantity,
+                    unitPrice,
+                    lineTotal: Math.round(unitPrice * quantity * 100) / 100
+                };
             });
-
             const subtotal = cart.reduce(
                 (sum, item) => sum + item.price * item.quantity, 0
             );
@@ -538,55 +571,102 @@ document.addEventListener('DOMContentLoaded', () => {
                 discountAmount = appliedDiscount.fixedAmount;
             }
 
-            const finalTotal = Math.max(0, subtotal - discountAmount);
-
+            const finalTotal = Math.round(Math.max(0, subtotal - discountAmount) * 100) / 100;
+            const details = items.map(item =>
+                `${item.quantity}x ${item.name} (${item.color}) - ${formatPrice(item.lineTotal)}`
+            );
             details.push('');
             details.push(`Subtotaal: ${formatPrice(subtotal)}`);
-
             if (appliedDiscount.code) {
                 details.push(`Kortingscode (${appliedDiscount.code}): -${formatPrice(discountAmount)}`);
             }
-
             details.push(`Totaalbedrag: ${formatPrice(finalTotal)}`);
             const detailsTekst = details.join('\n');
+            const cartSnapshot = JSON.stringify({
+                items,
+                total: finalTotal,
+                discountCode: appliedDiscount.code || '',
+                contactMethod: contactMethod || '',
+                customerName: customerName || '',
+                customerContact: customerContact || ''
+            });
 
             if (cartDetailsInput) cartDetailsInput.value = detailsTekst;
 
-            try {
-                // SheetMonkey
-                const sheetResponse = await fetch(orderForm.action, {
+            // These extra fields are invisible to shoppers and keep the checkout UI unchanged.
+            if (!pendingOrder || pendingOrder.cartSnapshot !== cartSnapshot) {
+                pendingOrder = {
+                    id: createOrderId(),
+                    cartSnapshot,
+                    sheetSubmitted: false,
+                    emailSubmitted: false
+                };
+                savePendingOrder();
+            }
+
+            const orderId = pendingOrder.id;
+            const orderItemsJson = JSON.stringify({
+                orderId,
+                items,
+                subtotal: Math.round(subtotal * 100) / 100,
+                discountCode: appliedDiscount.code || '',
+                discountAmount: Math.round(discountAmount * 100) / 100,
+                total: finalTotal,
+                currency: 'EUR'
+            });
+
+            formData.set('Bestelling', detailsTekst);
+            formData.set('OrderID', orderId);
+            formData.set('OrderItemsJSON', orderItemsJson);
+            formData.set('Totaalbedrag', finalTotal.toFixed(2));
+
+            const emailData = new FormData();
+            emailData.append('access_key', 'e1c6c373-1e32-4e71-bb0c-0f94cbcdd270');
+            emailData.append('subject', `Nieuwe bestelling van ${customerName}!`);
+            emailData.append('Naam', customerName || '');
+            emailData.append('Voorkeur contact', contactMethod || '');
+            emailData.append('Contactgegevens', customerContact || '');
+            emailData.append('Bestelling', detailsTekst);
+            emailData.append('OrderID', orderId);
+            emailData.append('Totaalbedrag', finalTotal.toFixed(2));
+
+            // Send both requests together so the email does not wait for SheetMonkey.
+            // Save each success separately; retrying then only repeats the unfinished step.
+            const sendToSheet = pendingOrder.sheetSubmitted
+                ? Promise.resolve(true)
+                : fetch(orderForm.action, {
                     method: 'POST',
-                    body: new FormData(orderForm),
+                    body: formData,
                     headers: { Accept: 'application/json' }
+                }).then(response => {
+                    if (!response.ok) throw new Error('SheetMonkey');
+                    pendingOrder.sheetSubmitted = true;
+                    savePendingOrder();
+                    return true;
                 });
 
-                if (!sheetResponse.ok) {
-                    throw new Error('De bestelling kon niet naar SheetMonkey worden verstuurd.');
-                }
-
-                // Web3Forms
-                const emailData = new FormData();
-                emailData.append('access_key', 'e1c6c373-1e32-4e71-bb0c-0f94cbcdd270');
-                emailData.append('subject', `Nieuwe bestelling van ${customerName}!`);
-                emailData.append('Naam', customerName || '');
-                emailData.append('Voorkeur contact', contactMethod || '');
-                emailData.append('Contactgegevens', customerContact || '');
-                emailData.append('Bestelling', detailsTekst);
-
-                const emailResponse = await fetch('https://api.web3forms.com/submit', {
+            const sendEmail = pendingOrder.emailSubmitted
+                ? Promise.resolve(true)
+                : fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
                     body: emailData
+                }).then(async response => {
+                    const result = await response.json();
+                    if (!response.ok || result.success === false) throw new Error('Web3Forms');
+                    pendingOrder.emailSubmitted = true;
+                    savePendingOrder();
+                    return true;
                 });
 
-                const emailResult = await emailResponse.json();
-
-                if (!emailResponse.ok || emailResult.success === false) {
-                    throw new Error('De e-mail kon niet worden verstuurd.');
+            let results = [];
+            try {
+                results = await Promise.allSettled([sendToSheet, sendEmail]);
+                if (!pendingOrder.sheetSubmitted || !pendingOrder.emailSubmitted) {
+                    throw new Error('The order did not complete in both services.');
                 }
-
                 showSuccessScreen(contactMethod);
             } catch (error) {
-                console.error('Bestelling versturen mislukt:', error);
+                console.error('Bestelling versturen mislukt:', error, results);
                 alert('Er ging iets mis bij het versturen van je bestelling. Probeer het opnieuw.');
 
                 if (submitBtn) {
@@ -610,6 +690,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (successModal) successModal.classList.add('open');
 
         cart = [];
+        pendingOrder = null;
+        savePendingOrder();
         appliedDiscount = { code: '', percentage: 0, fixedAmount: 0 };
         if (couponInput) couponInput.value = '';
         if (couponMessage) couponMessage.textContent = '';
