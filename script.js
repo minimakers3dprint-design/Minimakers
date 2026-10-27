@@ -1,4 +1,117 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === REVIEWS SYSTEEM ===
+    const reviewForm = document.getElementById('review-form');
+    const reviewsList = document.getElementById('reviews-list');
+
+    function escapeHTML(str) {
+        return String(str || '').replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+
+    function loadReviews() {
+        if (!reviewsList) return;
+        let savedReviews = [];
+        try {
+            savedReviews = JSON.parse(localStorage.getItem('minimakers_reviews') || 'null');
+        } catch (e) {
+            savedReviews = null;
+        }
+
+        if (!Array.isArray(savedReviews)) {
+            savedReviews = [
+                { id: 1, name: 'Daan', rating: 5, text: 'Super fijne multiclicker! Snelle levering in IJmuiden.' },
+                { id: 2, name: 'Sophie', rating: 5, text: 'Heel blij met mijn telefoonhouder en erg duurzaam materiaal!' }
+            ];
+            try {
+                localStorage.setItem('minimakers_reviews', JSON.stringify(savedReviews));
+            } catch (e) {}
+        }
+
+        reviewsList.innerHTML = '';
+        if (savedReviews.length === 0) {
+            reviewsList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Nog geen reviews. Schrijf hierboven de eerste!</p>';
+            return;
+        }
+
+        savedReviews.forEach(rev => {
+            const stars = '⭐'.repeat(Math.max(1, Math.min(5, Number(rev.rating) || 5)));
+            const reviewItem = document.createElement('div');
+            reviewItem.className = 'review-item';
+            reviewItem.innerHTML = `
+                <div class="review-content">
+                    <div class="review-author">${escapeHTML(rev.name)}</div>
+                    <div class="review-stars">${stars}</div>
+                    <div class="review-text">${escapeHTML(rev.text)}</div>
+                </div>
+                <button type="button" class="delete-review-btn" data-id="${rev.id}">Verwijder</button>
+            `;
+            reviewsList.appendChild(reviewItem);
+        });
+    }
+
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('review-name');
+            const ratingInput = document.getElementById('review-rating');
+            const textInput = document.getElementById('review-text');
+
+            if (!nameInput || !ratingInput || !textInput) return;
+
+            const name = nameInput.value.trim();
+            const rating = parseInt(ratingInput.value, 10) || 5;
+            const text = textInput.value.trim();
+
+            if (!name || !text) return;
+
+            const newReview = {
+                id: Date.now(),
+                name,
+                rating,
+                text
+            };
+
+            let savedReviews = [];
+            try {
+                savedReviews = JSON.parse(localStorage.getItem('minimakers_reviews') || '[]');
+            } catch (e) {
+                savedReviews = [];
+            }
+
+            savedReviews.unshift(newReview);
+            try {
+                localStorage.setItem('minimakers_reviews', JSON.stringify(savedReviews));
+            } catch (e) {}
+
+            reviewForm.reset();
+            loadReviews();
+        });
+    }
+
+    if (reviewsList) {
+        reviewsList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.delete-review-btn');
+            if (!btn || !reviewsList.contains(btn)) return;
+
+            const idToDelete = parseInt(btn.getAttribute('data-id'), 10);
+            let savedReviews = [];
+            try {
+                savedReviews = JSON.parse(localStorage.getItem('minimakers_reviews') || '[]');
+            } catch (e) {
+                savedReviews = [];
+            }
+
+            savedReviews = savedReviews.filter(rev => rev.id !== idToDelete);
+            try {
+                localStorage.setItem('minimakers_reviews', JSON.stringify(savedReviews));
+            } catch (e) {}
+            loadReviews();
+        });
+    }
+
+    loadReviews();
+
     // === PERSISTENTE WINKELMAND & KORTING ===
     let cart = [];
     let appliedDiscount = { code: '', percentage: 0, fixedAmount: 0 };

@@ -79,32 +79,6 @@ body.cart-open {
     gap: 20px;
 }
 
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.nav-about-btn {
-    text-decoration: none;
-    padding: 12px 20px;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    background: rgba(255,255,255,0.1);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.2);
-    display: inline-flex;
-    align-items: center;
-    transition: all 0.3s;
-}
-
-.nav-about-btn:hover {
-    background: rgba(255,255,255,0.2);
-    transform: translateY(-2px);
-}
-
 .brand-title {
     font-size: 2.8rem;
     font-weight: 800;
@@ -121,16 +95,50 @@ body.cart-open {
     margin-top: 4px;
 }
 
+/* Header Acties & Knoppen */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
 .cart-trigger-btn {
     background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.2);
     color: white;
-    padding: 12px 20px;
-    border-radius: 30px;
+    padding: 10px 20px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     position: relative;
@@ -139,7 +147,7 @@ body.cart-open {
 
 .cart-trigger-btn:hover {
     background: rgba(255,255,255,0.2);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .cart-badge {
@@ -158,6 +166,15 @@ body.cart-open {
     justify-content: center;
     padding: 0 6px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Eco label styling */
+.eco-tag {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: #059669;
+    font-weight: 600;
 }
 
 /* Controls / Filter Sectie */
@@ -257,7 +274,6 @@ body.cart-open {
     flex-direction: column;
     box-shadow: var(--shadow-sm);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-    max-width: none;
 }
 
 .product-card:hover {
@@ -285,7 +301,6 @@ body.cart-open {
     transform: scale(1.05);
 }
 
-/* BADGES (Populair & Premium) */
 .badge {
     position: absolute;
     top: 12px;
@@ -297,10 +312,6 @@ body.cart-open {
     padding: 4px 10px;
     border-radius: 20px;
     z-index: 2;
-}
-
-.badge.premium {
-    background: #8b5cf6;
 }
 
 .card-content {
@@ -320,15 +331,7 @@ body.cart-open {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--primary-hover);
-    margin-bottom: 8px;
-}
-
-/* Product Beschrijving */
-.product-description {
-    font-size: 0.88rem;
-    color: var(--text-muted);
     margin-bottom: 12px;
-    line-height: 1.4;
 }
 
 .color-select-group {
@@ -819,7 +822,7 @@ body.cart-open {
     opacity: 0.6;
 }
 
-/* --- Categorie Kopteksten Over Volledige Breedte --- */
+/* Categorie Kopteksten Over Volledige Breedte */
 .category-header {
     grid-column: 1 / -1;
     width: 100%;
@@ -846,7 +849,7 @@ body.cart-open {
     border-radius: 3px;
 }
 
-/* --- WhatsApp & YouTube Promotie Banner --- */
+/* WhatsApp & YouTube Promotie Banner */
 .channels-banner-section {
     margin: 20px auto 0 auto;
     padding: 0 15px;
@@ -910,7 +913,7 @@ body.cart-open {
     opacity: 0.95;
 }
 
-/* --- WhatsApp in Bedank Modal --- */
+/* WhatsApp in Bedank Modal */
 .success-whatsapp-box {
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
@@ -936,7 +939,7 @@ body.cart-open {
     background: #1EBE5D;
 }
 
-/* --- Kortingscode Veld --- */
+/* Kortingscode Veld */
 .coupon-wrapper {
     display: flex;
     gap: 10px;
@@ -977,6 +980,24 @@ body.cart-open {
 .coupon-message.error {
     color: #ef4444;
 }
-.header-actions a.nav-about-link:hover {
-    color: var(--primary);
+
+/* Mededelingenbalk Bovenin */
+#announcement-bar {
+    background: #0f172a;
+    color: #ffffff;
+    text-align: center;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#announcement-bar p {
+    margin: 0;
+    color: #ffffff;
+}
+
+#announcement-bar .highlight-local {
+    color: #10b981;
+    font-weight: 700;
 }
