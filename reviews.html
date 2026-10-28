@@ -3,177 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klantreviews | Minimakers</title>
+    <title>Reviews | Minimakers</title>
     <link rel="icon" type="image/png" href="logo.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Header -->
     <header class="site-header">
         <div class="header-main container">
             <div class="brand-container">
-                <h1 class="brand-title"><a href="index.html" style="text-decoration: none; color: inherit;">Minimakers</a></h1>
-                <p class="brand-subtitle">Wat onze klanten zeggen</p>
+                <h1 class="brand-title">Minimakers</h1>
+                <p class="brand-subtitle">Reviews</p>
             </div>
-            <div class="header-actions">
-                <a href="index.html" class="nav-btn">&larr; Terug naar de winkel</a>
-            </div>
+            <nav class="header-nav">
+                <a href="index.html" class="nav-back-link">&larr; Terug naar de winkel</a>
+            </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container" style="margin: 40px auto; max-width: 750px;">
-        
-        <div class="section-header" style="text-align: center; margin-bottom: 30px;">
-            <h2>Echte ervaringen van klanten</h2>
-            <p style="color: var(--text-muted);">Laat hieronder jouw ervaring achter of lees wat anderen schrijven!</p>
-        </div>
+    <main class="container" style="padding: 50px 20px 80px 20px;">
+        <section class="review-form-container" style="max-width: 800px; margin: 0 auto 40px;">
+            <h2>Schrijf een review</h2>
+            <form id="review-form">
+                <label for="review-name">Naam:</label><br>
+                <input type="text" id="review-name" required placeholder="Jouw naam"><br><br>
 
-        <!-- FORMULIER OM REVIEW DIRECT TE PLAATSEN -->
-        <div class="filter-card" style="display: block; padding: 25px; margin-bottom: 35px;">
-            <h3 style="margin-bottom: 12px; font-size: 1.25rem;">Schrijf een review</h3>
-            
-            <form id="public-review-form" class="order-form">
-                <div class="form-group">
-                    <label for="review-name">Jouw Naam *</label>
-                    <input type="text" id="review-name" required placeholder="Bijv. Daan van IJmuiden">
-                </div>
-                
-                <div class="form-group">
-                    <label for="review-rating">Aantal sterren *</label>
-                    <select id="review-rating" class="select-box" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px;">
-                        <option value="5">⭐⭐⭐⭐⭐ (5/5 sterren)</option>
-                        <option value="4">⭐⭐⭐⭐ (4/5 sterren)</option>
-                        <option value="3">⭐⭐⭐ (3/5 sterren)</option>
-                        <option value="2">⭐⭐ (2/5 sterren)</option>
-                        <option value="1">⭐ (1/5 sterren)</option>
-                    </select>
-                </div>
+                <label for="review-rating">Beoordeling:</label><br>
+                <select id="review-rating" required>
+                    <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                    <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                    <option value="3">⭐⭐⭐ (3/5)</option>
+                    <option value="2">⭐⭐ (2/5)</option>
+                    <option value="1">⭐ (1/5)</option>
+                </select><br><br>
 
-                <div class="form-group">
-                    <label for="review-text">Jouw Ervaring *</label>
-                    <textarea id="review-text" rows="3" required placeholder="Wat vond je van de kwaliteit en de service?" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; outline: none; font-size: 0.95rem;"></textarea>
-                </div>
+                <label for="review-text">Jouw review:</label><br>
+                <textarea id="review-text" rows="4" required placeholder="Wat vind je van het product?"></textarea><br><br>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 5px;">Plaats Review Direct</button>
+                <button type="submit">Plaats review</button>
             </form>
-        </div>
+        </section>
 
-        <!-- REVIEWS LIJST -->
-        <div id="reviews-list" style="display: flex; flex-direction: column; gap: 16px;">
-            <!-- Reviews worden hier automatisch ingeladen -->
-        </div>
-
+        <section class="reviews-display-container" style="max-width: 800px; margin: 0 auto;">
+            <h2>Wat anderen zeggen</h2>
+            <div id="reviews-list"></div>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="site-footer" style="margin-top: 60px;">
+    <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2026 Minimakers. Alle rechten voorbehouden.</p>
+            <p>Vragen of maatwerk? Mail naar <a href="mailto:minimakers3dprint@gmail.com">minimakers3dprint@gmail.com</a></p>
+            <p class="copyright">&copy; 2026 Minimakers. Alle rechten voorbehouden.</p>
         </div>
     </footer>
 
-    <!-- Review Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // BEHEERDERS-INSTELLING: Zet dit in VS Code op 'true' als je reviews wilt kunnen verwijderen!
-            const SHOW_DELETE_BUTTONS = false; 
-
-            const form = document.getElementById('public-review-form');
-            const list = document.getElementById('reviews-list');
-
-            function escapeHTML(str) {
-                return String(str || '').replace(/[&<>'"]/g, 
-                    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-                );
-            }
-
-            function loadReviews() {
-                if (!list) return;
-                let saved = [];
-                try {
-                    saved = JSON.parse(localStorage.getItem('minimakers_reviews_v2') || 'null');
-                } catch (e) {
-                    saved = null;
-                }
-
-                if (!Array.isArray(saved)) {
-                    saved = [
-                        { id: 1, name: 'Daan', rating: 5, text: 'Super fijne multiclicker! Snelle eigen bezorging in IJmuiden en heel stevig materiaal.' },
-                        { id: 2, name: 'Sophie', rating: 5, text: 'Heel blij met mijn telefoonhouder. Handig dat het van milieuvriendelijk PLA is gemaakt!' }
-                    ];
-                    try { localStorage.setItem('minimakers_reviews_v2', JSON.stringify(saved)); } catch (e) {}
-                }
-
-                list.innerHTML = '';
-                if (saved.length === 0) {
-                    list.innerHTML = '<p style="color: var(--text-muted); text-align: center;">Nog geen reviews. Wees de eerste!</p>';
-                    return;
-                }
-
-                saved.forEach(rev => {
-                    const stars = '⭐'.repeat(Math.max(1, Math.min(5, Number(rev.rating) || 5)));
-                    const item = document.createElement('div');
-                    item.className = 'review-card-item';
-                    item.style.cssText = 'background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;';
-                    
-                    let deleteBtnHTML = '';
-                    if (SHOW_DELETE_BUTTONS) {
-                        deleteBtnHTML = `<button type="button" class="delete-rev-btn" data-id="${rev.id}" style="background: #fee2e2; color: #ef4444; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">Verwijder</button>`;
-                    }
-
-                    item.innerHTML = `
-                        <div style="flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong style="font-size: 1rem; color: var(--text-main);">${escapeHTML(rev.name)}</strong>
-                                <span style="color: #f59e0b; font-size: 0.9rem;">${stars}</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0; line-height: 1.4;">${escapeHTML(rev.text)}</p>
-                        </div>
-                        ${deleteBtnHTML}
-                    `;
-                    list.appendChild(item);
-                });
-            }
-
-            if (form) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const name = document.getElementById('review-name').value.trim();
-                    const rating = parseInt(document.getElementById('review-rating').value, 10);
-                    const text = document.getElementById('review-text').value.trim();
-
-                    if (!name || !text) return;
-
-                    const newReview = { id: Date.now(), name, rating, text };
-                    let saved = [];
-                    try { saved = JSON.parse(localStorage.getItem('minimakers_reviews_v2') || '[]'); } catch (e) {}
-
-                    saved.unshift(newReview);
-                    try { localStorage.setItem('minimakers_reviews_v2', JSON.stringify(saved)); } catch (e) {}
-
-                    form.reset();
-                    loadReviews();
-                });
-            }
-
-            if (list) {
-                list.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.delete-rev-btn');
-                    if (!btn) return;
-                    const id = parseInt(btn.getAttribute('data-id'), 10);
-                    let saved = [];
-                    try { saved = JSON.parse(localStorage.getItem('minimakers_reviews_v2') || '[]'); } catch (e) {}
-                    saved = saved.filter(r => r.id !== id);
-                    try { localStorage.setItem('minimakers_reviews_v2', JSON.stringify(saved)); } catch (e) {}
-                    loadReviews();
-                });
-            }
-
-            loadReviews();
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
