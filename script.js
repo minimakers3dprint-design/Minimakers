@@ -49,13 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // === ZOEKEN EN FILTEREN ===
     const searchInput = document.getElementById('search-input');
     const categorySelect = document.getElementById('category-select');
-    const productCards = document.querySelectorAll('.product-card');
+    const productGrid = document.querySelector('.products-grid');
 
     function filterProducts() {
         const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
         const selectedCategory = categorySelect ? categorySelect.value : 'alle';
 
-        productCards.forEach(card => {
+        document.querySelectorAll('.product-card').forEach(card => {
             const titleElement = card.querySelector('.product-title');
             const title = titleElement ? titleElement.textContent.toLowerCase() : '';
             const category = card.getAttribute('data-category');
@@ -223,9 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // === PRODUCT TOEVOEGEN ===
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', event => {
-            const card = event.currentTarget.closest('.product-card');
+    if (productGrid) productGrid.addEventListener('click', event => {
+            const button = event.target.closest('.add-to-cart-btn');
+            if (!button || !productGrid.contains(button) || button.disabled) return;
+            const card = button.closest('.product-card');
             if (!card) return;
 
             const colorStringArray = [];
@@ -257,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCartUI();
 
             if (choiceModal) choiceModal.classList.add('open');
-        });
     });
 
     if (openCartBtn) openCartBtn.addEventListener('click', openCart);
