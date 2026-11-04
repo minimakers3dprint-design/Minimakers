@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Minimakers beheer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#10b981;--brand:#047857;--dark:#0f172a;--text:#1e293b;--muted:#64748b;--line:#e2e8f0;--bg:#f8fafc;--radius:16px}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--text);background:var(--bg);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+h1{font-size:1.5rem;margin:0}
+h2{font-size:1.05rem;margin:0}
+small,.muted{color:var(--muted)}
+label{display:grid;gap:4px;font-weight:500;font-size:.9rem}
+input,select,textarea{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;width:100%}
+input[type=checkbox]{width:auto}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer;display:inline-block;text-align:center}
+.btn:hover{background:#065f46}
+.btn.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--bg)}
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{background:var(--dark);color:#cbd5e1;padding:24px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.brand{color:#fff;font-weight:800;font-size:1.25rem;padding:0 12px 20px}
+aside button,aside a{background:none;border:0;color:inherit;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:500;width:100%;text-decoration:none;display:block}
+aside button:hover,aside a:hover{background:rgba(255,255,255,.07)}
+aside button[aria-current=page]{background:rgba(16,185,129,.2);color:#fff}
+.spacer{flex:1}
+main{padding:32px;max-width:1120px;width:100%}
+.head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:20px}
+.panel .head{margin-bottom:14px}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.tabs button{border:0;background:none;padding:7px 14px;cursor:pointer;font-weight:500}
+.tabs button[aria-pressed=true]{background:var(--dark);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);padding:0}
+.kpis div{padding:20px 22px;border-left:1px solid var(--line);display:grid;gap:2px}
+.kpis div:first-child{border-left:0}
+.kpis strong{font-size:1.6rem;font-weight:700}
+.kpis span{color:var(--muted);font-size:.9rem}
+.chart{display:flex;gap:4px;height:240px;position:relative;padding-top:18px}
+.ymax{position:absolute;top:0;left:0;font-size:.75rem;color:var(--muted)}
+.col{flex:1;min-width:0;display:flex;flex-direction:column}
+.barwrap{flex:1;display:flex;align-items:flex-end;border-bottom:1px solid var(--line)}
+.bar{width:100%;background:var(--primary);border-radius:4px 4px 0 0;min-height:2px}
+.col:hover .bar{background:var(--brand)}
+.col span{height:22px;padding-top:4px;font-size:.72rem;color:var(--muted);white-space:nowrap;display:flex;justify-content:center}
+.best{display:grid;grid-template-columns:minmax(120px,200px) 1fr 90px;gap:12px;align-items:center;padding:7px 0}
+.best .track{background:var(--bg);border-radius:6px;height:12px}
+.best .fill{background:var(--primary);height:100%;border-radius:6px}
+.best b{text-align:right;font-weight:600}
+.load{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.load label{min-width:150px}
+.steps{margin:6px 0 16px;padding-left:20px;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:.85rem;padding:0 10px 10px}
+td{padding:10px;border-top:1px solid var(--line);vertical-align:middle}
+.table{overflow-x:auto;padding:16px 12px}
+.thumb{width:44px;height:44px;border-radius:10px;object-fit:cover;background:var(--bg);display:block}
+.form{display:grid;gap:14px;max-width:560px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check{grid-auto-flow:column;justify-content:start;align-items:center;gap:8px}
+.preview{max-width:120px;border-radius:10px}
+.ok{background:#d1fae5;border-radius:10px;padding:10px 14px;margin-bottom:16px}
+.banner{background:#fef3c7;border-radius:10px;padding:10px 14px;margin-bottom:20px}
+@media(max-width:820px){
+ .shell{grid-template-columns:1fr}
+ aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:12px}
+ aside .brand{width:100%;padding:0 8px 6px}
+ aside button,aside a{width:auto}
+ .spacer{display:none}
+ main{padding:18px}
+ .kpis{grid-template-columns:1fr 1fr}
+ .kpis div:nth-child(3){border-left:0}
+ .kpis div:nth-child(n+3){border-top:1px solid var(--line)}
+ .best{grid-template-columns:100px 1fr 70px}
+ .row2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="brand">Minimakers</div>
+    <nav>
+      <button data-view="overzicht" aria-current="page">Overzicht</button>
+      <button data-view="producten">Producten</button>
+    </nav>
+    <div class="spacer"></div>
+    <a href="../">Naar de webshop</a>
+  </aside>
+
+  <main>
+    <div id="demoBanner" class="banner" hidden>Dit zijn voorbeeldgegevens. Laad je eigen bestand om je echte cijfers te zien.</div>
+
+    <section id="v-overzicht">
+      <div class="head">
+        <div><h1>Overzicht</h1><p id="range" class="muted" style="margin:0"></p></div>
+        <div class="tabs" id="periodTabs">
+          <button data-p="dag" aria-pressed="true">Dag</button>
+          <button data-p="week" aria-pressed="false">Week</button>
+          <button data-p="maand" aria-pressed="false">Maand</button>
+          <button data-p="jaar" aria-pressed="false">Jaar</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Bestellingen laden</h2>
+        <ol class="steps">
+          <li>Open je Google Sheet met bestellingen.</li>
+          <li>Kies Bestand, Downloaden, Kommagescheiden waarden (.csv).</li>
+          <li>Laad het bestand hier. Het blijft in je eigen browser.</li>
+        </ol>
+        <div class="load">
+          <label class="btn" style="cursor:pointer">Kies CSV-bestand<input id="csvFile" type="file" accept=".csv,text/csv" hidden></label>
+          <label>Kolom met de datum<select id="dateCol"></select></label>
+          <label>Datumnotatie<select id="dateFmt"><option value="dmy">dag-maand-jaar</option><option value="mdy">maand-dag-jaar</option></select></label>
+          <button class="btn ghost" id="demoBtn" type="button">Voorbeeld bekijken</button>
+        </div>
+        <p id="loadNote" class="muted" style="margin:12px 0 0"></p>
+      </div>
+
+      <div id="dash" hidden>
+        <div class="panel kpis" id="kpis"></div>
+        <div class="panel">
+          <div class="head">
+            <h2 id="chartTitle"></h2>
+            <div class="tabs" id="metricTabs">
+              <button data-m="rev" aria-pressed="true">Omzet</button>
+              <button data-m="qty" aria-pressed="false">Aantal verkocht</button>
+            </div>
+          </div>
+          <div class="chart" id="chart"></div>
+        </div>
+        <div class="panel">
+          <div class="head"><h2 id="bestTitle"></h2></div>
+          <div id="best"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="v-producten" hidden>
+      <div class="head"><h1>Producten</h1></div>
+
+      <div class="panel">
+        <h2>Stap 1: laad je index.html</h2>
+        <p class="muted">Kies het bestand uit je projectmap. Het dashboard voegt nieuwe producten toe met dezelfde kaart als de bestaande.</p>
+        <label class="btn" style="cursor:pointer;width:max-content">Kies index.html<input id="htmlFile" type="file" accept=".html,text/html" hidden></label>
+      </div>
+
+      <div id="prodTools" hidden>
+        <div id="prodDone" class="ok" hidden></div>
+        <div class="panel">
+          <h2 style="margin-bottom:14px">Stap 2: product toevoegen</h2>
+          <form id="pForm" class="form">
+            <label>Naam<input name="pname" required></label>
+            <label>Beschrijving<textarea name="description" rows="3" required></textarea></label>
+            <div class="row2">
+              <label>Prijs in euro<input name="price" inputmode="decimal" placeholder="2,50" required></label>
+              <label>Categorie
+                <select name="category"><option value="Feestdagen">Feestdagen</option><option value="fidgets">Fidgets &amp; Toys</option><option value="gadgets">Gadgets</option></select>
+              </label>
+            </div>
+            <label>Foto<input name="photo" type="file" accept="image/*" required></label>
+            <img id="pPreview" class="preview" alt="" hidden>
+            <small>Zet de foto in dezelfde map als index.html. De bestandsnaam wordt gebruikt in de kaart.</small>
+            <label class="check"><input name="two" type="checkbox">Twee kleuren kiezen (hoofd- en accentkleur)</label>
+            <label class="check"><input name="pop" type="checkbox">Label “Populair” tonen</label>
+            <div><button class="btn">Product toevoegen</button></div>
+          </form>
+        </div>
+        <div class="panel" id="dlPanel" hidden>
+          <h2>Stap 3: opslaan</h2>
+          <p class="muted">Download het nieuwe bestand, vervang index.html in je map en push naar GitHub.</p>
+          <button class="btn" id="dlBtn" type="button">Download index.html</button>
+        </div>
+        <div class="panel table">
+          <table>
+            <thead><tr><th></th><th>Product</th><th>Prijs</th><th>Categorie</th></tr></thead>
+            <tbody id="productsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const P = { dag: { n: 30, text: '30 dagen' }, week: { n: 12, text: '12 weken' }, maand: { n: 12, text: '12 maanden' }, jaar: { n: 5, text: '5 jaar' } };
+const COLORS = ['Zwart', 'Wit', 'Rood', 'Groen', 'Oranje', 'Donkerblauw', 'Lichtblauw', 'Grijs', 'Bruin'];
+const CATS = { Feestdagen: 'Feestdagen', fidgets: 'Fidgets & Toys', gadgets: 'Gadgets' };
+let period = 'dag', metric = 'rev', orders = [], csv = null, shopHtml = '', added = 0;
+
+const eur = v => new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(Number(v) || 0);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const sum = (a, k) => a.reduce((t, x) => t + x[k], 0);
+
+/* ---------- CSV ---------- */
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const first = text.split(/\r?\n/)[0];
+  const delim = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ';' : ',';
+  const rows = [];
+  let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === delim) { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(f); f = '';
+      if (row.some(x => x !== '')) rows.push(row);
+      row = [];
+    } else f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); if (row.some(x => x !== '')) rows.push(row); }
+  return rows;
+}
+function parseDate(s, mdy) {
+  s = String(s || '').trim();
+  if (!s) return null;
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{1,2}):(\d{2}))?/);
+  if (m) return new Date(+m[1], m[2] - 1, +m[3], +m[4] || 0, +m[5] || 0);
+  m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})(?:[ T,]+(\d{1,2}):(\d{2}))?/);
+  if (m) {
+    const a = +m[1], b = +m[2];
+    return new Date(+m[3], (mdy ? a : b) - 1, mdy ? b : a, +m[4] || 0, +m[5] || 0);
+  }
+  const t = Date.parse(s);
+  return isNaN(t) ? null : new Date(t);
+}
+function applyCSV() {
+  const H = csv.headers;
+  const find = re => H.findIndex(x => re.test(x));
+  const di = +$('#dateCol').value, ii = find(/orderitems/i), ti = find(/totaalbedrag|^total/i);
+  const mdy = $('#dateFmt').value === 'mdy';
+  orders = [];
+  let skipped = 0, noItems = 0;
+  for (const r of csv.rows) {
+    const dt = parseDate(r[di], mdy);
+    if (!dt) { skipped++; continue; }
+    let obj = null;
+    if (ii >= 0) { try { obj = JSON.parse(r[ii]); } catch (e) { obj = null; } }
+    let total = ti >= 0 ? parseFloat(String(r[ti]).replace(/[^\d,.-]/g, '').replace(',', '.')) : NaN;
+    if (isNaN(total)) total = obj ? Number(obj.total) || 0 : 0;
+    if (!obj || !obj.items) noItems++;
+    orders.push({ created_at: dt, total, items: (obj && obj.items) || [] });
+  }
+  let note = `${orders.length} bestellingen geladen.`;
+  if (skipped) note += ` ${skipped} rijen zonder herkenbare datum overgeslagen. Controleer de datumkolom en datumnotatie.`;
+  if (ii < 0) note += ' De kolom OrderItemsJSON ontbreekt, dus de bestsellers kunnen niet worden berekend.';
+  else if (noItems) note += ` ${noItems} oudere bestellingen hebben geen productgegevens en tellen alleen mee voor de omzet.`;
+  $('#loadNote').textContent = note;
+  render();
+}
+function loadCSVText(text, save) {
+  const rows = parseCSV(text);
+  if (rows.length < 2) { $('#loadNote').textContent = 'Het bestand is leeg of geen geldige CSV.'; return; }
+  csv = { headers: rows[0].map(h => h.trim()), rows: rows.slice(1) };
+  const guess = csv.headers.findIndex(h => /datum|date|time|tijd|created|timestamp/i.test(h));
+  $('#dateCol').innerHTML = csv.headers.map((h, i) => `<option value="${i}">${esc(h || 'Kolom ' + (i + 1))}</option>`).join('');
+  $('#dateCol').value = guess >= 0 ? guess : 0;
+  $('#demoBanner').hidden = true;
+  if (save) { try { localStorage.setItem('mm_csv', text); } catch (e) {} }
+  applyCSV();
+}
+$('#csvFile').onchange = async e => { const f = e.target.files[0]; if (f) loadCSVText(await f.text(), true); };
+$('#dateCol').onchange = $('#dateFmt').onchange = () => csv && applyCSV();
+
+/* ---------- periodes ---------- */
+function bucketStart(d, p) {
+  if (p === 'dag') return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  if (p === 'week') { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x; }
+  if (p === 'maand') return new Date(d.getFullYear(), d.getMonth(), 1);
+  return new Date(d.getFullYear(), 0, 1);
+}
+function step(d, p, k) {
+  const x = new Date(d);
+  if (p === 'dag') x.setDate(x.getDate() + k);
+  else if (p === 'week') x.setDate(x.getDate() + 7 * k);
+  else if (p === 'maand') x.setMonth(x.getMonth() + k);
+  else x.setFullYear(x.getFullYear() + k);
+  return x;
+}
+function isoWeek(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+  return Math.ceil(((t - new Date(Date.UTC(t.getUTCFullYear(), 0, 1))) / 864e5 + 1) / 7);
+}
+function label(d, p) {
+  if (p === 'dag') return d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+  if (p === 'week') return 'wk ' + isoWeek(d);
+  if (p === 'maand') return d.toLocaleDateString('nl-NL', { month: 'short', year: '2-digit' });
+  return String(d.getFullYear());
+}
+function compute() {
+  const last = bucketStart(new Date(), period);
+  const buckets = [];
+  for (let i = P[period].n - 1; i >= 0; i--) {
+    const s = step(last, period, -i);
+    buckets.push({ s, t: s.getTime(), rev: 0, qty: 0, orders: 0 });
+  }
+  const map = new Map(buckets.map(b => [b.t, b]));
+  const prod = new Map();
+  for (const o of orders) {
+    const b = map.get(bucketStart(o.created_at, period).getTime());
+    if (!b) continue;
+    b.rev += o.total;
+    b.orders++;
+    for (const it of o.items) {
+      const q = Number(it.quantity) || 1;
+      b.qty += q;
+      const e = prod.get(it.name) || { name: it.name, qty: 0, rev: 0 };
+      e.qty += q;
+      e.rev += (Number(it.price) || 0) * q;
+      prod.set(it.name, e);
+    }
+  }
+  return { buckets, prod: [...prod.values()] };
+}
+
+/* ---------- overzicht ---------- */
+function render() {
+  $('#dash').hidden = !orders.length;
+  if (!orders.length) { $('#range').textContent = ''; return; }
+  const d = compute();
+  const key = metric === 'rev' ? 'rev' : 'qty';
+  const fmt = v => metric === 'rev' ? eur(v) : v + ' stuks';
+  const rev = sum(d.buckets, 'rev'), qty = sum(d.buckets, 'qty'), n = sum(d.buckets, 'orders');
+  $('#range').textContent = 'Afgelopen ' + P[period].text;
+  $('#kpis').innerHTML = [['Omzet', eur(rev)], ['Bestellingen', n], ['Stuks verkocht', qty], ['Gemiddelde bestelling', eur(n ? rev / n : 0)]]
+    .map(([l, v]) => `<div><strong>${v}</strong><span>${l}</span></div>`).join('');
+  $('#chartTitle').textContent = (metric === 'rev' ? 'Omzet' : 'Aantal verkocht') + ' per ' + period;
+  const max = Math.max(...d.buckets.map(b => b[key]), 0);
+  const every = Math.ceil(d.buckets.length / 8);
+  $('#chart').innerHTML = `<div class="ymax">${max ? fmt(max) : ''}</div>` + d.buckets.map((b, i) =>
+    `<div class="col" title="${label(b.s, period)}: ${eur(b.rev)}, ${b.qty} stuks"><div class="barwrap"><div class="bar" style="height:${max ? b[key] / max * 100 : 0}%"></div></div><span>${i % every === 0 ? label(b.s, period) : ''}</span></div>`).join('');
+  const top = d.prod.sort((a, b) => b[key] - a[key]).slice(0, 8);
+  $('#bestTitle').textContent = 'Bestverkocht, ' + (metric === 'rev' ? 'op omzet' : 'op aantal');
+  $('#best').innerHTML = top.length ? top.map(p =>
+    `<div class="best"><span>${esc(p.name)}</span><div class="track"><div class="fill" style="width:${p[key] / top[0][key] * 100}%"></div></div><b>${fmt(p[key])}</b></div>`).join('')
+    : '<p class="muted">Nog geen bestellingen in deze periode.</p>';
+}
+$$('#periodTabs button').forEach(b => b.onclick = () => {
+  period = b.dataset.p;
+  $$('#periodTabs button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  render();
+});
+$$('#metricTabs button').forEach(b => b.onclick = () => {
+  metric = b.dataset.m;
+  $$('#metricTabs button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  render();
+});
+$$('nav button').forEach(b => b.onclick = () => {
+  $$('nav button').forEach(x => x.removeAttribute('aria-current'));
+  b.setAttribute('aria-current', 'page');
+  ['overzicht', 'producten'].forEach(v => { $('#v-' + v).hidden = v !== b.dataset.view; });
+});
+
+/* ---------- producten ---------- */
+function listProducts() {
+  const doc = new DOMParser().parseFromString(shopHtml, 'text/html');
+  const cards = [...doc.querySelectorAll('.product-card')];
+  $('#productsBody').innerHTML = cards.map(c => {
+    const img = c.querySelector('.product-image');
+    return `<tr><td><img class="thumb" src="../${esc(img ? img.getAttribute('src') : '')}" alt=""></td>
+      <td>${esc(c.querySelector('.product-title')?.textContent)}</td>
+      <td>${esc(c.querySelector('.price-tag')?.textContent)}</td>
+      <td>${esc(CATS[c.dataset.category] || c.dataset.category)}</td></tr>`;
+  }).join('');
+}
+$('#htmlFile').onchange = async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  shopHtml = await f.text();
+  if (!shopHtml.includes('class="product-card"')) {
+    shopHtml = '';
+    $('#prodTools').hidden = true;
+    alert('Dit lijkt niet het index.html van je webshop. Kies het bestand uit de hoofdmap van je project.');
+    return;
+  }
+  added = 0;
+  $('#prodDone').hidden = true;
+  $('#dlPanel').hidden = true;
+  $('#prodTools').hidden = false;
+  listProducts();
+};
+function options(list) { return list.map(c => `<option value="${c}">${c}</option>`).join(''); }
+function cardHtml(p) {
+  const accent = ['Wit', ...COLORS.filter(c => c !== 'Wit')];
+  const select = (lab, name, list) => `                        <div class="color-select">
+                            <label>${lab}</label>
+                            <select class="select-box" data-color-label="${name}">
+                                ${options(list)}
+                            </select>
+                        </div>`;
+  const colors = p.two ? select('1. Hoofdkleur:', 'Hoofdkleur', COLORS) + '\n' + select('2. Accentkleur:', 'Accentkleur', accent)
+    : select('Kies kleur filament:', 'Kleur', COLORS);
+  return `            <!-- ${esc(p.name)} -->
+            <article class="product-card" data-category="${p.category}">
+                <div class="card-image-wrapper">
+                    <img src="${esc(p.image)}" alt="${esc(p.name)}" class="product-image">${p.pop ? '\n                    <span class="badge">Populair</span>' : ''}
+                </div>
+                <div class="card-content">
+                    <h3 class="product-title">${esc(p.name)}</h3>
+                    <div class="price-tag">${eur(p.price).replace(/\u00a0/g, '')}</div>
+                    <p class="product-description">${esc(p.description)} <span class="eco-tag">🌱 Gemaakt van milieuvriendelijk PLA.</span></p>
+                    <div class="color-select-group">
+${colors}
+                    </div>
+                    <button class="btn add-to-cart-btn" data-id="p${Date.now()}" data-name="${esc(p.name)}" data-price="${p.price.toFixed(2)}" data-image="${esc(p.image)}">In winkelmand</button>
+                </div>
+            </article>`;
+}
+$('#pForm').elements.photo.onchange = e => {
+  const file = e.target.files[0];
+  $('#pPreview').hidden = !file;
+  if (file) $('#pPreview').src = URL.createObjectURL(file);
+};
+$('#pForm').onsubmit = e => {
+  e.preventDefault();
+  const f = e.target;
+  const d = Object.fromEntries(new FormData(f));
+  const price = parseFloat(String(d.price).replace(',', '.'));
+  if (!(price >= 0)) return alert('Vul een geldige prijs in, bijvoorbeeld 2,50.');
+  const photo = f.elements.photo.files[0];
+  const p = { name: d.pname.trim(), description: d.description.trim(), price, category: d.category, image: photo.name, two: !!d.two, pop: !!d.pop };
+  const marker = `<article class="product-card" data-category="${p.category}"`;
+  const i = shopHtml.lastIndexOf(marker);
+  const end = i < 0 ? -1 : shopHtml.indexOf('</article>', i);
+  if (end < 0) return alert('Kon de plek voor dit product in index.html niet vinden.');
+  const at = end + '</article>'.length;
+  shopHtml = shopHtml.slice(0, at) + '\n\n' + cardHtml(p) + shopHtml.slice(at);
+  added++;
+  f.reset();
+  $('#pPreview').hidden = true;
+  $('#prodDone').hidden = false;
+  $('#prodDone').textContent = `${p.name} is toegevoegd (${added} nieuw). Voeg er nog een toe of ga naar stap 3. Vergeet niet de foto ${p.image} in je map te zetten.`;
+  $('#dlPanel').hidden = false;
+  listProducts();
+};
+$('#dlBtn').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([shopHtml], { type: 'text/html' }));
+  a.download = 'index.html';
+  a.click();
+};
+
+/* ---------- voorbeeld ---------- */
+$('#demoBtn').onclick = () => {
+  const list = [['Multiclicker', 2.5], ['Hexagon Fidget', 2.5], ['Joy Fidget', 1.5], ['Infinity Cube', 2], ['Christmas Tree', 2.5], ['Sinterklaas Bowl', 5], ['Phone Holder', 1.5], ['Key Organizer', 10], ['Pringles Tray', 5], ['Egg Seperator', 2.5]];
+  let seed = 7;
+  const r = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  orders = [];
+  for (let i = 0; i < 260; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - Math.floor(r() * r() * 500));
+    const count = 1 + Math.floor(r() * 3);
+    const items = [];
+    for (let k = 0; k < count; k++) {
+      const p = list[Math.floor(r() * r() * list.length)];
+      items.push({ name: p[0], price: p[1], quantity: 1 + Math.floor(r() * 2) });
+    }
+    orders.push({ created_at: d, total: items.reduce((a, b) => a + b.price * b.quantity, 0), items });
+  }
+  $('#demoBanner').hidden = false;
+  $('#loadNote').textContent = '';
+  render();
+};
+
+/* ---------- start ---------- */
+try { const saved = localStorage.getItem('mm_csv'); if (saved) loadCSVText(saved, false); } catch (e) {}
+</script>
+</body>
+</html>
